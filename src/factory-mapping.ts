@@ -1,13 +1,7 @@
 import { BigInt, log, Bytes, Address } from "@graphprotocol/graph-ts";
-import { Register as RegisterV1 } from "../generated/V1Factory/V1Factory";
-import {
-  Register as RegisterV2,
-  Delete,
-} from "../generated/V2Factory/V2Factory";
-import { V1Moloch } from "../generated/templates/MolochV1Template/V1Moloch";
-import { Guildbank } from "../generated/templates/MolochV1Template/Guildbank";
+import {Register as RegisterV2} from "../generated/V2Factory/V2Factory";
 
-import { MolochV1Template, MolochV2Template } from "../generated/templates";
+import { MolochV2Template } from "../generated/templates";
 import { Moloch, Member } from "../generated/schema";
 
 import {
@@ -18,56 +12,14 @@ import {
 } from "./v2-mapping";
 import { addSummonBadge, addMembershipBadge } from "./badges";
 
-export function handleRegisterV1(event: RegisterV1): void {
-  if (event.params.newContract.toString() == "0") {
-    return;
-  }
-  MolochV1Template.create(event.params.moloch);
-
-  let molochId = event.params.moloch.toHex();
-  let moloch = new Moloch(molochId);
-  moloch.summoner = event.params.summoner;
-  moloch.title = event.params.title;
-  moloch.newContract = event.params.newContract.toString();
-  moloch.version = "1";
-  moloch.deleted = false;
-
-  moloch.totalShares = BigInt.fromI32(1);
-  moloch.totalLoot = BigInt.fromI32(0);
-  moloch.proposalCount = BigInt.fromI32(0);
-  moloch.proposalQueueCount = BigInt.fromI32(0);
-  moloch.proposalDeposit = BigInt.fromI32(0);
-  moloch.dilutionBound = BigInt.fromI32(0);
-  moloch.processingReward = BigInt.fromI32(0);
-
-  let approvedTokens: string[] = [];
-  moloch.approvedTokens = approvedTokens;
-
-  let contract = V1Moloch.bind(event.params.moloch);
-  moloch.periodDuration = contract.periodDuration();
-  moloch.votingPeriodLength = contract.votingPeriodLength();
-  moloch.gracePeriodLength = contract.gracePeriodLength();
-  moloch.proposalDeposit = contract.proposalDeposit();
-  moloch.dilutionBound = contract.dilutionBound();
-  moloch.processingReward = contract.processingReward();
-  moloch.summoningTime = contract.summoningTime();
-  moloch.guildBankAddress = contract.guildBank();
-
-  let gbContract = Guildbank.bind(moloch.guildBankAddress as Address);
-  let depositTokenAddress = gbContract.approvedToken();
-  approvedTokens.push(createAndApproveToken(molochId, depositTokenAddress));
-  moloch.depositToken = approvedTokens[0];
-
-  moloch.save();
-}
-
-export function handleRegisterV2(event: RegisterV2): void {
+export function handleSummoned(event: Summoned): void {
   MolochV2Template.create(event.params.moloch);
 
   let molochId = event.params.moloch.toHex();
   let moloch = new Moloch(molochId);
   let tokens = event.params.tokens;
   let approvedTokens: string[] = [];
+  let summoners: string[] = [];
 
   let escrowTokenBalance: string[] = [];
   let guildTokenBalance: string[] = [];
@@ -79,11 +31,14 @@ export function handleRegisterV2(event: RegisterV2): void {
     guildTokenBalance.push(createGuildTokenBalance(molochId, token));
   }
 
-  moloch.summoner = event.params.summoner;
+  for (let i = 0; i < summoners.length; i++) {
+    let summoner = summoners[i];
+    summoners.push(createSummoner(molochId, summoner));
+  }
+
+  moloch.summoner = summoners;
   moloch.summoningTime = event.params._summoningTime;
-  moloch.title = event.params.title;
   moloch.version = "2";
-  moloch.deleted = false;
   moloch.newContract = "1";
   moloch.periodDuration = event.params._periodDuration;
   moloch.votingPeriodLength = event.params._votingPeriodLength;
@@ -95,7 +50,7 @@ export function handleRegisterV2(event: RegisterV2): void {
   moloch.approvedTokens = approvedTokens;
   moloch.guildTokenBalance = guildTokenBalance;
   moloch.escrowTokenBalance = escrowTokenBalance;
-  moloch.totalShares = BigInt.fromI32(1);
+  moloch.totalShares = summoners.length;
   moloch.totalLoot = BigInt.fromI32(0);
   moloch.proposalCount = BigInt.fromI32(0);
   moloch.proposalQueueCount = BigInt.fromI32(0);
@@ -107,47 +62,7 @@ export function handleRegisterV2(event: RegisterV2): void {
 
   moloch.save();
 
-  addSummonBadge(event.params.summoner, event.transaction);
+  addSummonBadge(event.params.summoners, event.transaction);
 
-  //Create member for summoner
-  let memberId = molochId
-    .concat("-member-")
-    .concat(event.params.summoner.toHex());
-  let newMember = new Member(memberId);
-  newMember.moloch = molochId;
-
-  newMember.molochAddress = event.params.moloch;
-  newMember.memberAddress = event.params.summoner;
-  newMember.createdAt = event.block.timestamp.toString();
-  newMember.delegateKey = event.params.summoner;
-  newMember.shares = BigInt.fromI32(1);
-  newMember.loot = BigInt.fromI32(0);
-  newMember.exists = true;
-  newMember.tokenTribute = BigInt.fromI32(0);
-  newMember.didRagequit = false;
-  newMember.proposedToKick = false;
-  newMember.kicked = false;
-
-  newMember.save();
-
-  addMembershipBadge(event.params.summoner);
-
-  //Set summoner summoner balances for approved tokens to zero
-  for (let i = 0; i < tokens.length; i++) {
-    let token = tokens[i];
-    let tokenId = molochId.concat("-token-").concat(token.toHex());
-    createMemberTokenBalance(
-      molochId,
-      event.params.summoner,
-      tokenId,
-      BigInt.fromI32(0)
-    );
-  }
 }
 
-export function handleDelete(event: Delete): void {
-  let molochId = event.address.toHexString();
-  let moloch = Moloch.load(molochId);
-  moloch.deleted = true;
-  moloch.save();
-}

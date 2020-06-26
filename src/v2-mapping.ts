@@ -205,6 +205,42 @@ export function createAndApproveToken(molochId: string, token: Bytes): string {
   return tokenId;
 }
 
+// used to create multiple summoners at time of summoning
+export function createAndAddSummoner(molochId: string, summoner: Bytes): string {
+  let memberId = molochId.concat("-member-").concat(summoner.toHex());
+  let newMember = new Member(summonerId);
+
+  newMember.moloch = molochId;
+  newMember.createdAt = event.block.timestamp.toString();
+  newMember.molochAddress = event.address;
+  newMember.memberAddress = summoner;
+  newMember.delegateKey = summoner;
+  newMember.shares = BigInt.fromI32(1);
+  newMember.loot = BigInt.fromI32(0);
+  newMember.tokenTribute = BigInt.fromI32(0);
+  newMember.didRagequit = false;
+  newMember.isSummoner = true; 
+  newMember.proposedToKick = false;
+  newMember.kicked = false;
+
+  newMember.save();
+
+  addMembershipBadge(summoner); 
+  moloch.totalShares = moloch.totalShares.plus(BigInt.fromI32(1));
+
+  //Set summoner summoner balances for approved tokens to zero
+    for (let i = 0; i < tokens.length; i++) {
+      let token = tokens[i];
+      let tokenId = molochId.concat("-token-").concat(token.toHex());
+      createMemberTokenBalance(
+        molochId,
+        summoner,
+        tokenId,
+        BigInt.fromI32(0)
+      );
+    }
+}
+
 // export function handleSummonComplete(event: SummonComplete): void {
 // The factory contract registers the new moloch after the summon event, so this event will not be triggered in the graph
 // all of the entities are created in factory-mapping.ts that would normally be created here.
@@ -271,7 +307,7 @@ export function handleSubmitProposal(event: SubmitProposal): void {
   // catch a bad kovan proposal with non-utf8 in the details field
   // if (event.params.details.toString().startsWith("{")) {
   if (
-    molochId == "0x501f352e32ec0c981268dc5b5ba1d3661b1acbc6" &&
+    molochId == "0x501f352e32ec0c981268dc5b5ba1d3661b1acbc6" && //set to minion address
     event.params.proposalId.toString() == "30"
   ) {
     proposal.details = "Minion Details Error";
@@ -477,6 +513,7 @@ export function handleProcessProposal(event: ProcessProposal): void {
       newMember.didRagequit = false;
       newMember.proposedToKick = false;
       newMember.kicked = false;
+      newMember.isSummoner = true;
 
       newMember.save();
 

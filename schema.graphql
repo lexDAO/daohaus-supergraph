@@ -1,6 +1,6 @@
 type Moloch @entity {
   id: ID!
-  summoner: Bytes!
+  summoners: [Member!]!
   title: String
   version: String
   newContract: String
@@ -67,6 +67,7 @@ type Member @entity {
   highestIndexYesVote: Proposal
   tokenTribute: BigInt!
   didRagequit: Boolean!
+  isSummoner: Boolean!
   votes: [Vote!] @derivedFrom(field: "member")
   submissions: [Proposal!] @derivedFrom(field: "member")
   tokenBalances: [TokenBalance!] @derivedFrom(field: "member")
