@@ -5,7 +5,7 @@
     "codegen": "graph codegen",
     "build": "graph build",
     "deploy-main": "node scripts/deploy-prep.js mainnet && graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ wswarren12/lex-dao-multi-summoner-moloch",
-    "deploy-rinkeby": "node scripts/deploy-prep.js rinkeby && graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ lex-dao-multi-summoner-moloch-rinkeby",
+    "deploy-rinkeby": "node scripts/deploy-prep.js rinkeby && graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ wswarren12/lex-dao-multi-summoner-moloch-r",
     "create-local": "graph create --node http://localhost:8020/ wswarren12/lexdaomoloch",
     "remove-local": "graph remove --node http://localhost:8020/ wswarren12/lexdaomoloch",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 wswarren12/lexdaomoloch"
