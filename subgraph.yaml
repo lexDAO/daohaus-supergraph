@@ -8,7 +8,7 @@ dataSources:
     source:
       address: '' # add address 
       abi: MolochSummoner
-      startBlock: 6494329
+      startBlock: 10338274
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
