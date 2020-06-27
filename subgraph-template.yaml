@@ -4,9 +4,9 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: V2Factory
-    network: mainnet
+    network: rinkeby
     source:
-      address: "" # add address 
+      address: "0x0cBCA3bFa95eC7D4ef55aFD80e8Fc6fBB642861c" #rinkeby address 
       abi: V2Factory
       startBlock: 10338274
     mapping:
@@ -29,7 +29,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: MolochV2Template
-    network: mainnet, rinkeby ## might need to have duplicate template for each network. 
+    network: rinkeby # change to mainnet for that deploy
     source:
       abi: V2Moloch
     mapping:

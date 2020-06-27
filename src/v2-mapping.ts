@@ -246,6 +246,29 @@ export function createAndAddSummoner(molochId: string, summoner: Bytes): string 
 // all of the entities are created in factory-mapping.ts that would normally be created here.
 // }
 
+export function handleSummoningTribute(event: MakeSummoningTribute): void {
+  let molochId = event.address.toHexString();
+  let member = Member.load(
+    molochId.concat("-member-").concat(event.params.memberAddress.toHex())
+  );
+
+  
+  tributeAmt = event.params.tribute;
+  tributeShares = event.params.shares;
+  tributeToken = moloch.depositToken;
+
+  //update member w/ new shares amount 
+  member.shares = member.shares.plus(tributeShares);
+  member.save();
+
+  let moloch = Moloch.load(molochId);
+
+  //GUILD w/ tribute 
+  addToBalance(molochId, GUILD, moloch.depositToken, tributeAmt);
+
+
+}
+
 export function handleSubmitProposal(event: SubmitProposal): void {
   let molochId = event.address.toHexString();
 
@@ -513,7 +536,7 @@ export function handleProcessProposal(event: ProcessProposal): void {
       newMember.didRagequit = false;
       newMember.proposedToKick = false;
       newMember.kicked = false;
-      newMember.isSummoner = true;
+      newMember.isSummoner = false;
 
       newMember.save();
 

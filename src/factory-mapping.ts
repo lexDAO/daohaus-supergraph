@@ -17,12 +17,12 @@ export function handleSummoned(event: Summoned): void {
 
   let molochId = event.params.moloch.toHex();
   let moloch = new Moloch(molochId);
-  let tokens = event.params.tokens;
+  let tokens = event.params.approvedTokens;
   let approvedTokens: string[] = [];
   let summoners: string[] = [];
-
   let escrowTokenBalance: string[] = [];
   let guildTokenBalance: string[] = [];
+
 
   for (let i = 0; i < tokens.length; i++) {
     let token = tokens[i];
@@ -51,6 +51,8 @@ export function handleSummoned(event: Summoned): void {
   moloch.guildTokenBalance = guildTokenBalance;
   moloch.escrowTokenBalance = escrowTokenBalance;
   moloch.totalShares = summoners.length;
+  moloch.summoningRate = event.params._summoningRate;
+  moloch.summoningTermination = event.params._summoningTermination;
   moloch.totalLoot = BigInt.fromI32(0);
   moloch.proposalCount = BigInt.fromI32(0);
   moloch.proposalQueueCount = BigInt.fromI32(0);
