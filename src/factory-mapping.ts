@@ -10,14 +10,14 @@ import {
   createGuildTokenBalance,
   createMemberTokenBalance,
 } from "./v2-mapping";
-import { addSummonBadge, addMembershipBadge } from "./badges";
+import { addMembershipBadge } from "./badges";
 
 export function handleSummoned(event: Summoned): void {
   MolochV2Template.create(event.params.moloch);
 
   let molochId = event.params.moloch.toHex();
   let moloch = new Moloch(molochId);
-  let tokens = event.params.approvedTokens;
+  let tokens = event.params._approvedTokens;
   let approvedTokens: string[] = [];
   let summoners: string[] = [];
   let escrowTokenBalance: string[] = [];
@@ -63,8 +63,6 @@ export function handleSummoned(event: Summoned): void {
   moloch.proposedToTrade = new Array<string>();
 
   moloch.save();
-
-  addSummonBadge(event.params.summoners, event.transaction);
 
 }
 

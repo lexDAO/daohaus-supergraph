@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: MolochSummoner
-    network: mainnet 
+    network: rinkeby 
     source:
-      address: '' # add address 
-      abi: MolochSummoner
-      startBlock: 10338274
+      address: "0x0cBCA3bFa95eC7D4ef55aFD80e8Fc6fBB642861c" # rinkeby
+      abi: V2Factory
+      startBlock: 6737981
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -16,23 +16,24 @@ dataSources:
       entities:
         - Register
       abis:
-        - name: MolochSummoner
-          file: ./abis/MolochSummoner.json
+        - name: V2Factory
+          file: ./abis/V2Factory.json
         - name: Erc20
           file: ./abis/Erc20.json
         - name: Erc20Bytes32
           file: ./abis/Erc20Bytes32.json
       eventHandlers:
-        - event: >-
-            Summoned(indexed address, indexed address)
-          handler: handleRegisterMoloch
+          - event: >-
+            Register(uint256,address,indexed
+            address,address[],uint256,uint256,uint256,uint256,uint256,uint256,uint256,string,uint256)
+          handler: handleRegisterV2
       file: ./src/factory-mapping.ts
 templates:
   - kind: ethereum/contract
     name: MolochTemplate
-    network: mainnet
+    network: rinkeby # change to mainnet for deploy
     source:
-      abi: Moloch
+      abi: V2Moloch
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -47,13 +48,15 @@ templates:
         - Proposal
         - Badge
       abis:
-        - name: Moloch
-          file: ./abis/Moloch.json
+        - name: V2Moloch
+          file: ./abis/V2Moloch.json
         - name: Erc20
           file: ./abis/Erc20.json
         - name: Erc20Bytes32
           file: ./abis/Erc20Bytes32.json
       eventHandlers:
+        - event: MakeSummoningTribute(indexed address,uint256,uint256)
+          handler: handleSummoningTribute
         - event: >-
             SubmitProposal(indexed
             address,uint256,uint256,uint256,address,uint256,address,string,bool[6],uint256,indexed
