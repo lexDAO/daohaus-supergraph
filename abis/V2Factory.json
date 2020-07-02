@@ -1,105 +1,34 @@
 [
 	{
+		"constant": false,
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "_minionSummoner",
+				"name": "molochSummoner",
 				"type": "address"
 			}
 		],
+		"name": "setMolochSummoner",
+		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
-				"internalType": "address",
-				"name": "baal",
-				"type": "address"
-			},
-			{
-				"indexed": true,
-				"internalType": "address[]",
-				"name": "_summoners",
-				"type": "address[]"
-			}
-		],
-		"name": "Summoned",
-		"type": "event"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "minionSummoner",
-		"outputs": [
-			{
-				"internalType": "contract ISummonMinion",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"constant": false,
 		"inputs": [
 			{
-				"internalType": "address[]",
-				"name": "_summoners",
-				"type": "address[]"
+				"internalType": "address",
+				"name": "moloch",
+				"type": "address"
 			},
 			{
-				"internalType": "address[]",
-				"name": "_approvedTokens",
-				"type": "address[]"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_periodDuration",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_votingPeriodLength",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_gracePeriodLength",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_proposalDeposit",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_dilutionBound",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_processingReward",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_summoningRate",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_summoningTermination",
-				"type": "uint256"
+				"internalType": "address",
+				"name": "molochDepositToken",
+				"type": "address"
 			}
 		],
-		"name": "summonMoloch",
+		"name": "summonMinion",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",

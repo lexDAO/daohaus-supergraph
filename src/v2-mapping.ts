@@ -241,10 +241,59 @@ export function createAndAddSummoner(molochId: string, summoner: Bytes): string 
     }
 }
 
-// export function handleSummonComplete(event: SummonComplete): void {
-// The factory contract registers the new moloch after the summon event, so this event will not be triggered in the graph
-// all of the entities are created in factory-mapping.ts that would normally be created here.
-// }
+export function handleSummonComplete(event: SummonComplete): void {
+
+  let molochId = event.address.toHexString();
+
+  let tokens = event.params._approvedTokens;
+  let summoners = event.params._summoners;
+  let approvedTokens: string[] = [];
+  let summoners: string[] = [];
+  let escrowTokenBalance: string[] = [];
+  let guildTokenBalance: string[] = [];
+
+
+  for (let i = 0; i < tokens.length; i++) {
+    let token = tokens[i];
+    approvedTokens.push(createAndApproveToken(molochId, token));
+    escrowTokenBalance.push(createEscrowTokenBalance(molochId, token));
+    guildTokenBalance.push(createGuildTokenBalance(molochId, token));
+  }
+
+  for (let i = 0; i < summoners.length; i++) {
+    let summoner = summoners[i];
+    summoners.push(createSummoner(molochId, summoner));
+  }
+
+  moloch.summoner = summoners;
+  moloch.summoningTime = event.params._summoningTime;
+  moloch.version = "2x";
+  moloch.periodDuration = event.params._periodDuration;
+  moloch.votingPeriodLength = event.params._votingPeriodLength;
+  moloch.gracePeriodLength = event.params._gracePeriodLength;
+  moloch.proposalDeposit = event.params._proposalDeposit;
+  moloch.dilutionBound = event.params._dilutionBound;
+  moloch.processingReward = event.params._processingReward;
+  moloch.depositToken = approvedTokens[0];
+  moloch.approvedTokens = approvedTokens;
+  moloch.guildTokenBalance = guildTokenBalance;
+  moloch.escrowTokenBalance = escrowTokenBalance;
+  moloch.totalShares = summoners.length;
+  moloch.summoningRate = event.params._summoningRate;
+  moloch.summoningTermination = event.params._summoningTermination;
+  moloch.manifesto = event.params._manifesto;
+  moloch.totalLoot = BigInt.fromI32(0);
+  moloch.proposalCount = BigInt.fromI32(0);
+  moloch.proposalQueueCount = BigInt.fromI32(0);
+  moloch.proposedToJoin = new Array<string>();
+  moloch.proposedToWhitelist = new Array<string>();
+  moloch.proposedToKick = new Array<string>();
+  moloch.proposedToFund = new Array<string>();
+  moloch.proposedToTrade = new Array<string>();
+
+  moloch.save();
+
+ }
 
 export function handleSummoningTribute(event: MakeSummoningTribute): void {
   let molochId = event.address.toHexString();
@@ -261,6 +310,7 @@ export function handleSummoningTribute(event: MakeSummoningTribute): void {
   member.shares = member.shares.plus(tributeShares);
   member.save();
 
+  //load moloch to get depositToken
   let moloch = Moloch.load(molochId);
 
   //GUILD w/ tribute 
@@ -268,6 +318,26 @@ export function handleSummoningTribute(event: MakeSummoningTribute): void {
 
 
 }
+
+export function handleAmendGovernance(event: AmendGovernance): void {
+  let molochId = event.address.toHexString();
+  let moloch = Moloch.load(molochId);
+
+  moloch.periodDuration = event.params._periodDuration;
+  moloch.votingPeriodLength = event.params._votingPeriodLength;
+  moloch.gracePeriodLength = event.params._gracePeriodLength;
+  moloch.proposalDeposit = event.params._proposalDeposit;
+  moloch.dilutionBound = event.params._dilutionBound;
+  moloch.processingReward = event.params._processingReward;
+  moloch.summoningRate = event.params._summoningRate;
+  moloch.summoningTermination = event.params._summoningTermination;
+  moloch.manifesto = event.params._manifesto;
+
+  moloch.save();
+  
+}
+
+
 
 export function handleSubmitProposal(event: SubmitProposal): void {
   let molochId = event.address.toHexString();
