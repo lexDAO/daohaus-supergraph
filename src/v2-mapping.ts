@@ -208,9 +208,10 @@ export function createAndApproveToken(molochId: string, token: Bytes): string {
 }
 
 // used to create multiple summoners at time of summoning
-export function createAndAddSummoner(molochId: string, summoner: Bytes): string {
+export function createAndAddSummoner(molochId: string, summoner: Bytes, tokens: Address[], event: SummonComplete): string {
   
-  
+  let moloch = Moloch.load(event.address.toHex())
+
   let memberId = molochId.concat("-member-").concat(summoner.toHex());
   let newMember = new Member(memberId);
 
@@ -230,7 +231,7 @@ export function createAndAddSummoner(molochId: string, summoner: Bytes): string 
   newMember.save();
 
   addMembershipBadge(summoner); 
-  moloch.totalShares = moloch.totalShares.plus(BigInt.fromI32(1));
+  moloch.totalShares = moloch.totalShares.plus(BigInt.fromI32(0));
 
   //Set summoner summoner balances for approved tokens to zero
     for (let i = 0; i < tokens.length; i++) {
@@ -243,6 +244,8 @@ export function createAndAddSummoner(molochId: string, summoner: Bytes): string 
         BigInt.fromI32(0)
       );
     }
+
+   return memberId; 
 }
 
 export function handleSummonComplete(event: SummonComplete): void {
@@ -250,7 +253,7 @@ export function handleSummonComplete(event: SummonComplete): void {
   let moloch = Moloch.load(event.address.toHex())
   let molochId = event.address.toHexString();
 
-  let tokens = event.params.approvedTokens;
+  let tokens = event.params.tokens;
   let approvedTokens: string[] = [];
   let escrowTokenBalance: string[] = [];
   let guildTokenBalance: string[] = [];
@@ -263,12 +266,12 @@ export function handleSummonComplete(event: SummonComplete): void {
     guildTokenBalance.push(createGuildTokenBalance(molochId, token));
   }
 
-  let summoners = event.params.summoners;
+  //let summoners = event.params.summoners;
   let summoners: string[] = [];
 
-  for (let i = 0; i < summoners.length; i++) {
-    let summoner = summoners[i];
-    summoners.push(createSummoner(molochId, summoner));
+  for (let i = 0; i < event.params.summoners.length; i++) {
+    let summoner = event.params.summoners[i];
+    summoners.push(createAndAddSummoner(molochId, tokens, summoner, event));
   }
 
   moloch.summoners = summoners;
@@ -402,17 +405,8 @@ export function handleSubmitProposal(event: SubmitProposal): void {
   proposal.yesShares = BigInt.fromI32(0);
   proposal.noShares = BigInt.fromI32(0);
   proposal.maxTotalSharesAndLootAtYesVote = BigInt.fromI32(0);
-
-  // catch a bad kovan proposal with non-utf8 in the details field
-  // if (event.params.details.toString().startsWith("{")) {
-  if (
-    molochId == "0x501f352e32ec0c981268dc5b5ba1d3661b1acbc6" && //set to minion address
-    event.params.proposalId.toString() == "30"
-  ) {
-    proposal.details = "Minion Details Error";
-  } else {
-    proposal.details = event.params.details;
-  }
+  proposal.details = event.params.details;
+  
 
   // calculate times
   let moloch = Moloch.load(molochId);

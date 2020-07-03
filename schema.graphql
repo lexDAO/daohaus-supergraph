@@ -81,6 +81,7 @@ type Member @entity {
   jailed: Proposal
 }
 
+
 type Vote @entity {
   id: ID!
   createdAt: String!
