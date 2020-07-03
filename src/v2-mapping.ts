@@ -323,6 +323,8 @@ export function handleAmendGovernance(event: AmendGovernance): void {
   let molochId = event.address.toHexString();
   let moloch = Moloch.load(molochId);
 
+  moloch.depositToken = event.params._depositToken;
+  moloch.minion = event.params_minion;
   moloch.periodDuration = event.params._periodDuration;
   moloch.votingPeriodLength = event.params._votingPeriodLength;
   moloch.gracePeriodLength = event.params._gracePeriodLength;

@@ -6,7 +6,7 @@ dataSources:
     name: MolochSummoner
     network: rinkeby 
     source:
-      address: "0x0cBCA3bFa95eC7D4ef55aFD80e8Fc6fBB642861c" # rinkeby
+      address: "0x416F9A966c4d3Bb501a9c8715Dd5954121120Dba" # rinkeby
       abi: V2Factory
       startBlock: 6737981
     mapping:
@@ -23,10 +23,8 @@ dataSources:
         - name: Erc20Bytes32
           file: ./abis/Erc20Bytes32.json
       eventHandlers:
-          - event: >-
-            Register(uint256,address,indexed
-            address,address[],uint256,uint256,uint256,uint256,uint256,uint256,uint256,string,uint256)
-          handler: handleRegisterV2
+        - event: Summoned(indexed address)
+          handler: handleSummoned
       file: ./src/factory-mapping.ts
 templates:
   - kind: ethereum/contract
@@ -55,12 +53,11 @@ templates:
         - name: Erc20Bytes32
           file: ./abis/Erc20Bytes32.json
       eventHandlers:
-        - event: MakeSummoningTribute(indexed address,uint256,uint256)
+        - event: MakeSummoningTribute(indexed address,indexed uint256,indexed uint256)
           handler: handleSummoningTribute
-        - event: >-
-            SubmitProposal(indexed
-            address,uint256,uint256,uint256,address,uint256,address,string,bool[6],uint256,indexed
-            address,indexed address)
+        - event: AmendGovernance(indexed address,indexed address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,bytes32)
+          handler: handleAmendGovernance 
+        - event: SubmitProposal(indexed address,uint256,uint256,uint256,address,uint256,address,bytes32,bool[6],uint256,indexed address,indexed address)
           handler: handleSubmitProposal
         - event: >-
             SubmitVote(uint256,indexed uint256,indexed address,indexed

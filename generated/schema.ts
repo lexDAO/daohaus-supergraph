@@ -42,13 +42,13 @@ export class Moloch extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get summoner(): Bytes {
-    let value = this.get("summoner");
-    return value.toBytes();
+  get summoners(): Array<string> {
+    let value = this.get("summoners");
+    return value.toStringArray();
   }
 
-  set summoner(value: Bytes) {
-    this.set("summoner", Value.fromBytes(value));
+  set summoners(value: Array<string>) {
+    this.set("summoners", Value.fromStringArray(value));
   }
 
   get title(): string | null {
@@ -214,6 +214,23 @@ export class Moloch extends Entity {
       this.unset("guildBankAddress");
     } else {
       this.set("guildBankAddress", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get minion(): Bytes | null {
+    let value = this.get("minion");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set minion(value: Bytes | null) {
+    if (value === null) {
+      this.unset("minion");
+    } else {
+      this.set("minion", Value.fromBytes(value as Bytes));
     }
   }
 
@@ -826,6 +843,15 @@ export class Member extends Entity {
     this.set("didRagequit", Value.fromBoolean(value));
   }
 
+  get isSummoner(): boolean {
+    let value = this.get("isSummoner");
+    return value.toBoolean();
+  }
+
+  set isSummoner(value: boolean) {
+    this.set("isSummoner", Value.fromBoolean(value));
+  }
+
   get votes(): Array<string> | null {
     let value = this.get("votes");
     if (value === null) {
@@ -1389,13 +1415,13 @@ export class Proposal extends Entity {
     this.set("trade", Value.fromBoolean(value));
   }
 
-  get details(): string {
+  get details(): Bytes {
     let value = this.get("details");
-    return value.toString();
+    return value.toBytes();
   }
 
-  set details(value: string) {
-    this.set("details", Value.fromString(value));
+  set details(value: Bytes) {
+    this.set("details", Value.fromBytes(value));
   }
 
   get maxTotalSharesAndLootAtYesVote(): BigInt | null {
