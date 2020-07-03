@@ -12,9 +12,9 @@ import {
   CancelProposal,
   Withdraw,
   TokensCollected,
-} from "../generated/templates/MolochV2Template/V2Moloch";
-import { Erc20 } from "../generated/templates/MolochV2Template/Erc20";
-import { Erc20Bytes32 } from "../generated/templates/MolochV2Template/Erc20Bytes32";
+} from "../generated/templates/MolochTemplate/V2Moloch";
+import { Erc20 } from "../generated/templates/MolochTemplate/Erc20";
+import { Erc20Bytes32 } from "../generated/templates/MolochTemplate/Erc20Bytes32";
 
 import {
   Moloch,

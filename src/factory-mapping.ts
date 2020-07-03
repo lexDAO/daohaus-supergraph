@@ -1,17 +1,24 @@
 import { BigInt, log, Bytes, Address } from "@graphprotocol/graph-ts";
-import {Register as RegisterV2} from "../generated/V2Factory/V2Factory";
+import { Summoned } from "../generated/MolochSummoner/V2Factory";
 
-import { MolochV2Template } from "../generated/templates";
-import { Moloch, Member } from "../generated/schema";
+import { MolochTemplate } from "../generated/templates";
+import { Moloch } from "../generated/schema";
 
 
 export function handleSummoned(event: Summoned): void {
-  MolochV2Template.create(event.params.moloch);
+  
+  let entity = Moloch.load(event.params.moloch.toHex())
 
+  // Entities only exist after they have been saved to the store;
+  // `null` checks allow to create entities on demand
+  if (entity == null) {
+    entity = new Moloch(event.params.moloch.toHex())
+  }
+
+  MolochTemplate.create(event.params.moloch);
   let molochId = event.params.moloch.toHex();
   let moloch = new Moloch(molochId);
   moloch.save();
 
-} 
-
-
+  
+}
