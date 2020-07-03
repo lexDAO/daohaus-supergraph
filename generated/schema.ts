@@ -217,6 +217,41 @@ export class Moloch extends Entity {
     }
   }
 
+  get summoningTermination(): BigInt {
+    let value = this.get("summoningTermination");
+    return value.toBigInt();
+  }
+
+  set summoningTermination(value: BigInt) {
+    this.set("summoningTermination", Value.fromBigInt(value));
+  }
+
+  get summoningRate(): BigInt {
+    let value = this.get("summoningRate");
+    return value.toBigInt();
+  }
+
+  set summoningRate(value: BigInt) {
+    this.set("summoningRate", Value.fromBigInt(value));
+  }
+
+  get manifesto(): Bytes | null {
+    let value = this.get("manifesto");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set manifesto(value: Bytes | null) {
+    if (value === null) {
+      this.unset("manifesto");
+    } else {
+      this.set("manifesto", Value.fromBytes(value as Bytes));
+    }
+  }
+
   get minion(): Bytes | null {
     let value = this.get("minion");
     if (value === null) {
