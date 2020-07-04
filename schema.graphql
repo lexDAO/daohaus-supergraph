@@ -1,6 +1,6 @@
 type Moloch @entity {
   id: ID!
-  summoners: [Member!]!
+  summoners: [Member!]! @derivedFrom(field: "moloch")
   title: String
   version: String
   newContract: String

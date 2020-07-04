@@ -7,7 +7,7 @@ const config = {
     v2FactoryStartBlock: 6731901,
   },
   mainnet: {
-    v2FactoryAddress: "",
+    v2FactoryAddress: "0x416F9A966c4d3Bb501a9c8715Dd5954121120Dba",
     v2FactoryStartBlock: 10338274,
   },
 };

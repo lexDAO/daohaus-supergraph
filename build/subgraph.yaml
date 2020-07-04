@@ -3,105 +3,32 @@ schema:
   file: schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: V1Factory
+    name: MolochSummoner
     network: rinkeby
     source:
-      address: "0x610247467d0dfA8B477ad7Dd1644e86CB2a79F8F"
-      abi: V1Factory
-      startBlock: 6494343
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      entities:
-        - Register
-      abis:
-        - name: V1Factory
-          file: V1Factory/abis/V1Factory.json
-        - name: V1Moloch
-          file: V1Factory/abis/V1Moloch.json
-        - name: Guildbank
-          file: V1Factory/abis/Guildbank.json
-        - name: Erc20
-          file: V1Factory/abis/Erc20.json
-        - name: Erc20Bytes32
-          file: V1Factory/abis/Erc20Bytes32.json
-      eventHandlers:
-        - event: Register(address,indexed address,uint256,string,uint256)
-          handler: handleRegisterV1
-      file: V1Factory/V1Factory.wasm
-  - kind: ethereum/contract
-    name: V2Factory
-    network: rinkeby
-    source:
-      address: "0x763b61A62EF076ad960E1d513713B2aeD7C1b88e"
+      address: "0x416F9A966c4d3Bb501a9c8715Dd5954121120Dba"
       abi: V2Factory
-      startBlock: 6494329
+      startBlock: 6737981
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
       language: wasm/assemblyscript
-      entities:
-        - Register
-      abis:
-        - name: V2Factory
-          file: V2Factory/abis/V2Factory.json
-        - name: Erc20
-          file: V2Factory/abis/Erc20.json
-        - name: Erc20Bytes32
-          file: V2Factory/abis/Erc20Bytes32.json
-      eventHandlers:
-        - event: Register(uint256,address,indexed
-            address,address[],uint256,uint256,uint256,uint256,uint256,uint256,uint256,string,uint256)
-          handler: handleRegisterV2
-        - event: Delete(address)
-          handler: handleDeleteV2
-      file: V1Factory/V1Factory.wasm
-templates:
-  - kind: ethereum/contract
-    name: MolochV1Template
-    network: rinkeby
-    source:
-      abi: V1Moloch
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      file: templates/MolochV1Template/MolochV1Template.wasm
       entities:
         - Moloch
-        - Member
-        - Vote
-        - Proposal
-        - Badge
       abis:
-        - name: V1Moloch
-          file: MolochV1Template/abis/V1Moloch.json
-        - name: Guildbank
-          file: MolochV1Template/abis/Guildbank.json
+        - name: V2Factory
+          file: MolochSummoner/abis/V2Factory.json
         - name: Erc20
-          file: MolochV1Template/abis/Erc20.json
+          file: MolochSummoner/abis/Erc20.json
         - name: Erc20Bytes32
-          file: MolochV1Template/abis/Erc20Bytes32.json
+          file: MolochSummoner/abis/Erc20Bytes32.json
       eventHandlers:
-        - event: SummonComplete(indexed address,uint256)
-          handler: handleSummonComplete
-        - event: SubmitProposal(uint256,indexed address,indexed address,indexed
-            address,uint256,uint256)
-          handler: handleSubmitProposal
-        - event: SubmitVote(indexed uint256,indexed address,indexed address,uint8)
-          handler: handleSubmitVote
-        - event: ProcessProposal(indexed uint256,indexed address,indexed
-            address,uint256,uint256,bool)
-          handler: handleProcessProposal
-        - event: Ragequit(indexed address,uint256)
-          handler: handleRagequit
-        - event: Abort(indexed uint256,address)
-          handler: handleAbort
-        - event: UpdateDelegateKey(indexed address,address)
-          handler: handleUpdateDelegateKey
+        - event: Summoned(indexed address)
+          handler: handleSummoned
+      file: MolochSummoner/MolochSummoner.wasm
+templates:
   - kind: ethereum/contract
-    name: MolochV2Template
+    name: MolochTemplate
     network: rinkeby
     source:
       abi: V2Moloch
@@ -109,7 +36,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.3
       language: wasm/assemblyscript
-      file: templates/MolochV2Template/MolochV2Template.wasm
+      file: templates/MolochTemplate/MolochTemplate.wasm
       entities:
         - Moloch
         - TokenBalance
@@ -120,14 +47,19 @@ templates:
         - Badge
       abis:
         - name: V2Moloch
-          file: MolochV2Template/abis/V2Moloch.json
+          file: MolochTemplate/abis/V2Moloch.json
         - name: Erc20
-          file: MolochV2Template/abis/Erc20.json
+          file: MolochTemplate/abis/Erc20.json
         - name: Erc20Bytes32
-          file: MolochV2Template/abis/Erc20Bytes32.json
+          file: MolochTemplate/abis/Erc20Bytes32.json
       eventHandlers:
+        - event: MakeSummoningTribute(indexed address,indexed uint256,indexed uint256)
+          handler: handleSummoningTribute
+        - event: AmendGovernance(indexed address,indexed
+            address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,bytes32)
+          handler: handleAmendGovernance
         - event: SubmitProposal(indexed
-            address,uint256,uint256,uint256,address,uint256,address,string,bool[6],uint256,indexed
+            address,uint256,uint256,uint256,address,uint256,address,bytes32,bool[6],uint256,indexed
             address,indexed address)
           handler: handleSubmitProposal
         - event: SubmitVote(uint256,indexed uint256,indexed address,indexed address,uint8)
