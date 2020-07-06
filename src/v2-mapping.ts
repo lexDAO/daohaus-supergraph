@@ -3,6 +3,7 @@ import {
   SummonComplete,
   AmendGovernance,
   MakeDeposit,
+  MakePayment,
   SubmitProposal,
   SubmitVote,
   ProcessProposal,
