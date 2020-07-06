@@ -272,7 +272,7 @@ export function handleSummonComplete(event: SummonComplete): void {
 
   moloch.summoners = summoners;
   moloch.summoningTime = event.params.summoningTime;
-  moloch.version = "2x";
+  moloch.version = "2xParty";
   moloch.periodDuration = event.params.periodDuration;
   moloch.votingPeriodLength = event.params.votingPeriodLength;
   moloch.gracePeriodLength = event.params.gracePeriodLength;
@@ -318,6 +318,25 @@ export function handleMakeDeposit(event: MakeDeposit): void {
 
   //GUILD w/ tribute
   addToBalance(molochId, GUILD, tributeTokenId, member.tokenTribute);
+}
+
+export function handleMakePayment(event: MakePayment): void {
+  let molochId = event.address.toHexString();
+  let payor = Payor.load(
+    molochId.concat("-payor-").concat(event.params.sender.toHex())
+  );
+  //load moloch to get depositToken
+  let moloch = Moloch.load(molochId);
+
+  payor.payorAddress = event.params.sender.toHex();
+  payor.paymenToken = event.params.paymentToken.toHex();
+  payor.payment = event.params.payment; 
+  payor.payments = payor.payments.plus(event.params.payment);
+  payor.save();
+
+
+  //GUILD w/ tribute
+  addToBalance(molochId, GUILD, payor.paymentToken, payor.payment);
 }
 
 export function handleAmendGovernance(event: AmendGovernance): void {
