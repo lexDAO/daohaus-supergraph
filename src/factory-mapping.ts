@@ -1,11 +1,11 @@
 import { BigInt, log, Bytes, Address } from "@graphprotocol/graph-ts";
-import { Summoned } from "../generated/MolochSummoner/V2Factory";
+import { PartyStarted } from "../generated/MolochSummoner/V2Factory";
 
 import { MolochTemplate } from "../generated/templates";
 import { Moloch } from "../generated/schema";
 
 
-export function handleSummoned(event: Summoned): void {
+export function handleStarted(event: PartyStarted): void {
   
   let entity = Moloch.load(event.params.moloch.toHex())
 

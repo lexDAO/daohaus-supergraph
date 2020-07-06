@@ -7,7 +7,7 @@ import {
   SubmitVote,
   ProcessProposal,
   UpdateDelegateKey,
-  SponsorProposal,
+  ProposalIndex,
   ProcessWhitelistProposal,
   ProcessGuildKickProposal,
   Ragequit,
@@ -29,11 +29,9 @@ import {
 } from "../generated/schema";
 import {
   addVotedBadge,
-  addSummonBadge,
   addRageQuitBadge,
   addJailedCountBadge,
   addProposalSubmissionBadge,
-  addProposalSponsorBadge,
   addMembershipBadge,
   addProposalProcessorBadge,
 } from "./badges";
@@ -302,7 +300,7 @@ export function handleSummonComplete(event: SummonComplete): void {
   moloch.save();
 }
 
-export function handleSummoningTribute(event: MakeSummoningTribute): void {
+export function handleMakeDeposit(event: MakeDeposit): void {
   let molochId = event.address.toHexString();
   let member = Member.load(
     molochId.concat("-member-").concat(event.params.memberAddress.toHex())
@@ -327,17 +325,12 @@ export function handleAmendGovernance(event: AmendGovernance): void {
   let molochId = event.address.toHexString();
   let moloch = Moloch.load(molochId);
 
-  moloch.depositToken = event.params.depositToken.toHexString();
+  moloch.newToken = event.params.newToken.toHexString();
   moloch.minion = event.params.minion;
-  moloch.periodDuration = event.params.periodDuration;
-  moloch.votingPeriodLength = event.params.votingPeriodLength;
-  moloch.gracePeriodLength = event.params.gracePeriodLength;
-  moloch.proposalDeposit = event.params.proposalDeposit;
-  moloch.dilutionBound = event.params.dilutionBound;
-  moloch.processingReward = event.params.processingReward;
-  moloch.summoningRate = event.params.summoningRate;
-  moloch.summoningTermination = event.params.summoningTermination;
+  moloch.depositRate = event.params.depositRate;
   moloch.manifesto = event.params.manifesto;
+
+  createAndApproveToken(molochId, moloch.newToken);
 
   moloch.save();
 }
@@ -388,18 +381,21 @@ export function handleSubmitProposal(event: SubmitProposal): void {
   proposal.startingPeriod = BigInt.fromI32(0);
   proposal.yesVotes = BigInt.fromI32(0);
   proposal.noVotes = BigInt.fromI32(0);
-  proposal.sponsored = flags[0];
-  proposal.processed = flags[1];
-  proposal.didPass = flags[2];
-  proposal.cancelled = flags[3];
-  proposal.whitelist = flags[4];
-  proposal.guildkick = flags[5];
+  proposal.processed = flags[0];
+  proposal.didPass = flags[1];
+  proposal.cancelled = flags[2];
+  proposal.guildkick = flags[3];
+  proposal.spending = flags[4];
+  proposal.member = flags[5];
   proposal.newMember = newMember;
   proposal.trade = trade;
   proposal.yesShares = BigInt.fromI32(0);
   proposal.noShares = BigInt.fromI32(0);
   proposal.maxTotalSharesAndLootAtYesVote = BigInt.fromI32(0);
   proposal.details = event.params.details;
+
+  //take deposit and move to ESCROW
+  addToBalance(molochId, ESCROW, moloch.depositToken, moloch.proposalDeposit);
 
   // calculate times
   let moloch = Moloch.load(molochId);
@@ -492,54 +488,43 @@ export function handleSubmitVote(event: SubmitVote): void {
   }
 }
 
-export function handleSponsorProposal(event: SponsorProposal): void {
+export function handleProposalIndex(event: ProposalIndex): void {
   let molochId = event.address.toHexString();
-  let memberId = molochId
-    .concat("-member-")
-    .concat(event.params.memberAddress.toHex());
-  let sponsorProposalId = molochId
+
+  let proposalIndexId = molochId
     .concat("-proposal-")
     .concat(event.params.proposalId.toString());
 
   let moloch = Moloch.load(molochId);
 
   // collect proposal deposit from sponsor and store it in the Moloch until the proposal is processed
-  addToBalance(molochId, ESCROW, moloch.depositToken, moloch.proposalDeposit);
+  
 
-  let proposal = Proposal.load(sponsorProposalId);
+  let proposal = Proposal.load(proposalIndexId);
 
   if (proposal.newMember) {
-    moloch.proposedToJoin = moloch.proposedToJoin.concat([sponsorProposalId]);
-    moloch.save();
-  } else if (proposal.whitelist) {
-    moloch.proposedToWhitelist = moloch.proposedToWhitelist.concat([
-      sponsorProposalId,
-    ]);
+    moloch.proposedToJoin = moloch.proposedToJoin.concat([proposalIndexId]);
     moloch.save();
   } else if (proposal.guildkick) {
-    moloch.proposedToKick = moloch.proposedToKick.concat([sponsorProposalId]);
+    moloch.proposedToKick = moloch.proposedToKick.concat([proposalIndexId]);
 
     let member = Member.load(memberId);
     member.proposedToKick = true;
     member.save();
     moloch.save();
   } else if (proposal.trade) {
-    moloch.proposedToTrade = moloch.proposedToTrade.concat([sponsorProposalId]);
+    moloch.proposedToTrade = moloch.proposedToTrade.concat([proposalIndexId]);
     moloch.save();
   } else {
-    moloch.proposedToFund = moloch.proposedToFund.concat([sponsorProposalId]);
+    moloch.proposedToFund = moloch.proposedToFund.concat([proposalIndexId]);
     moloch.save();
   }
 
   proposal.proposalIndex = event.params.proposalIndex;
-  proposal.sponsor = event.params.memberAddress;
   proposal.sponsoredAt = event.block.timestamp.toString();
   proposal.startingPeriod = event.params.startingPeriod;
-  proposal.sponsored = true;
 
   proposal.save();
-
-  addProposalSponsorBadge(event.params.memberAddress, event.transaction);
 }
 
 export function handleProcessProposal(event: ProcessProposal): void {
@@ -712,73 +697,6 @@ export function handleProcessProposal(event: ProcessProposal): void {
   proposal.save();
 }
 
-export function handleProcessWhitelistProposal(
-  event: ProcessWhitelistProposal
-): void {
-  let molochId = event.address.toHexString();
-  let moloch = Moloch.load(molochId);
-
-  let processProposalId = molochId
-    .concat("-proposal-")
-    .concat(event.params.proposalId.toString());
-  let proposal = Proposal.load(processProposalId);
-
-  let tokenId = molochId
-    .concat("-token-")
-    .concat(proposal.tributeToken.toHex());
-
-  let token = Token.load(tokenId);
-
-  let isNotWhitelisted =
-    token != null && token.whitelisted == true ? false : true;
-
-  addProposalProcessorBadge(event.transaction.from, event.transaction);
-
-  //NOTE: PROPOSAL PASSED
-  if (event.params.didPass) {
-    proposal.didPass = true;
-
-    //CREATE Token
-    //NOTE: invariant no loot no shares,
-    if (isNotWhitelisted) {
-      createAndApproveToken(molochId, proposal.tributeToken);
-      createEscrowTokenBalance(molochId, proposal.tributeToken);
-      createGuildTokenBalance(molochId, proposal.tributeToken);
-    }
-
-    //NOTE: PROPOSAL FAILED
-  } else {
-    proposal.didPass = false;
-  }
-  //NOTE: can only process proposals in order.
-  moloch.proposedToWhitelist = moloch.proposedToWhitelist.filter(function(
-    value,
-    index,
-    arr
-  ) {
-    return index > 0;
-  });
-  proposal.processed = true;
-
-  //NOTE: issue processing reward and return deposit
-  internalTransfer(
-    molochId,
-    ESCROW,
-    event.transaction.from,
-    moloch.depositToken,
-    moloch.processingReward
-  );
-  internalTransfer(
-    molochId,
-    ESCROW,
-    proposal.sponsor,
-    moloch.depositToken,
-    moloch.proposalDeposit.minus(moloch.processingReward)
-  );
-
-  moloch.save();
-  proposal.save();
-}
 
 export function handleProcessGuildKickProposal(
   event: ProcessGuildKickProposal
