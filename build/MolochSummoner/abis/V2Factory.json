@@ -1,45 +1,5 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_minionSummoner",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "moloch",
-        "type": "address"
-      }
-    ],
-    "name": "Summoned",
-    "type": "event"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "minionSummoner",
-    "outputs": [
-      {
-        "internalType": "contract ISummonMinion",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "constant": false,
     "inputs": [
       {
@@ -84,6 +44,16 @@
       },
       {
         "internalType": "uint256",
+        "name": "_summonerStake",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_summoningDeposit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "_summoningRate",
         "type": "uint256"
       },
@@ -91,17 +61,52 @@
         "internalType": "uint256",
         "name": "_summoningTermination",
         "type": "uint256"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_manifesto",
-        "type": "bytes32"
       }
     ],
     "name": "summonMoloch",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_minionSummoner",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "moloch",
+        "type": "address"
+      }
+    ],
+    "name": "SummonMoloch",
+    "type": "event"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "minionSummoner",
+    "outputs": [
+      {
+        "internalType": "contract ISummonMinion",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   }
 ]

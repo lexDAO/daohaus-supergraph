@@ -42,13 +42,21 @@ export class Moloch extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get summoners(): Array<string> {
+  get summoners(): Array<string> | null {
     let value = this.get("summoners");
-    return value.toStringArray();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set summoners(value: Array<string>) {
-    this.set("summoners", Value.fromStringArray(value));
+  set summoners(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("summoners");
+    } else {
+      this.set("summoners", Value.fromStringArray(value as Array<string>));
+    }
   }
 
   get title(): string | null {
@@ -233,40 +241,6 @@ export class Moloch extends Entity {
 
   set summoningRate(value: BigInt) {
     this.set("summoningRate", Value.fromBigInt(value));
-  }
-
-  get manifesto(): Bytes | null {
-    let value = this.get("manifesto");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
-  }
-
-  set manifesto(value: Bytes | null) {
-    if (value === null) {
-      this.unset("manifesto");
-    } else {
-      this.set("manifesto", Value.fromBytes(value as Bytes));
-    }
-  }
-
-  get minion(): Bytes | null {
-    let value = this.get("minion");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
-  }
-
-  set minion(value: Bytes | null) {
-    if (value === null) {
-      this.unset("minion");
-    } else {
-      this.set("minion", Value.fromBytes(value as Bytes));
-    }
   }
 
   get tokens(): Array<string> | null {
@@ -860,13 +834,21 @@ export class Member extends Entity {
     }
   }
 
-  get tokenTribute(): BigInt {
+  get tokenTribute(): BigInt | null {
     let value = this.get("tokenTribute");
-    return value.toBigInt();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set tokenTribute(value: BigInt) {
-    this.set("tokenTribute", Value.fromBigInt(value));
+  set tokenTribute(value: BigInt | null) {
+    if (value === null) {
+      this.unset("tokenTribute");
+    } else {
+      this.set("tokenTribute", Value.fromBigInt(value as BigInt));
+    }
   }
 
   get didRagequit(): boolean {

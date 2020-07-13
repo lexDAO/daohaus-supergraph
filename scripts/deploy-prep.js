@@ -3,7 +3,7 @@ const yaml = require("js-yaml");
 
 const config = {
   rinkeby: {
-    v2FactoryAddress: "", 
+    v2FactoryAddress: "0xD75B24b0CbB2d1c4623f3d2D87097499B49A8315", 
     v2FactoryStartBlock: 6731901,
   },
   mainnet: {

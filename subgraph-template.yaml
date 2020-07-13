@@ -6,7 +6,7 @@ dataSources:
     name: V2Factory
     network: rinkeby
     source:
-      address: "0x416F9A966c4d3Bb501a9c8715Dd5954121120Dba" #rinkeby address 
+      address: "0xf4B4B807f1b9deC1E6D1590A2ff8A4EB0C4F3F16" #rinkeby address 
       abi: V2Factory
       startBlock: 6737981
     mapping:
@@ -23,7 +23,7 @@ dataSources:
         - name: Erc20Bytes32
           file: ./abis/Erc20Bytes32.json
       eventHandlers:
-        - event: Summoned(indexed address)
+        - event: SummonMoloch(indexed address)
           handler: handleSummoned
       file: ./src/factory-mapping.ts 
 templates:
@@ -54,9 +54,7 @@ templates:
           file: ./abis/Erc20Bytes32.json
       eventHandlers:
         - event: MakeSummoningTribute(indexed address,indexed uint256,indexed uint256)
-          handler: handleSummoningTribute
-        - event: AmendGovernance(indexed address,indexed address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,bytes32)
-          handler: handleAmendGovernance    
+          handler: handleSummoningTribute  
         - event: SubmitProposal(indexed address,uint256,uint256,uint256,address,uint256,address,bytes32,bool[6],uint256,indexed address,indexed address)
           handler: handleSubmitProposal
         - event: SubmitVote(uint256,indexed uint256,indexed address,indexed address,uint8)

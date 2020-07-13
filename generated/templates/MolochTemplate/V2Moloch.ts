@@ -15,64 +15,6 @@ import {
   CallResult
 } from "@graphprotocol/graph-ts";
 
-export class AmendGovernance extends EthereumEvent {
-  get params(): AmendGovernance__Params {
-    return new AmendGovernance__Params(this);
-  }
-}
-
-export class AmendGovernance__Params {
-  _event: AmendGovernance;
-
-  constructor(event: AmendGovernance) {
-    this._event = event;
-  }
-
-  get depositToken(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get minion(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get periodDuration(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-
-  get votingPeriodLength(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get gracePeriodLength(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
-  }
-
-  get proposalDeposit(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-
-  get dilutionBound(): BigInt {
-    return this._event.parameters[6].value.toBigInt();
-  }
-
-  get processingReward(): BigInt {
-    return this._event.parameters[7].value.toBigInt();
-  }
-
-  get summoningRate(): BigInt {
-    return this._event.parameters[8].value.toBigInt();
-  }
-
-  get summoningTermination(): BigInt {
-    return this._event.parameters[9].value.toBigInt();
-  }
-
-  get manifesto(): Bytes {
-    return this._event.parameters[10].value.toBytes();
-  }
-}
-
 export class CancelProposal extends EthereumEvent {
   get params(): CancelProposal__Params {
     return new CancelProposal__Params(this);
@@ -404,16 +346,20 @@ export class SummonComplete__Params {
     return this._event.parameters[8].value.toBigInt();
   }
 
-  get summoningRate(): BigInt {
+  get summonerStake(): BigInt {
     return this._event.parameters[9].value.toBigInt();
   }
 
-  get summoningTermination(): BigInt {
+  get summoningDeposit(): BigInt {
     return this._event.parameters[10].value.toBigInt();
   }
 
-  get manifesto(): Bytes {
-    return this._event.parameters[11].value.toBytes();
+  get summoningRate(): BigInt {
+    return this._event.parameters[11].value.toBigInt();
+  }
+
+  get summoningTermination(): BigInt {
+    return this._event.parameters[12].value.toBigInt();
   }
 }
 
@@ -852,21 +798,6 @@ export class V2Moloch extends SmartContract {
     return CallResult.fromValue(value[0].toBoolean());
   }
 
-  manifesto(): Bytes {
-    let result = super.call("manifesto", []);
-
-    return result[0].toBytes();
-  }
-
-  try_manifesto(): CallResult<Bytes> {
-    let result = super.tryCall("manifesto", []);
-    if (result.reverted) {
-      return new CallResult();
-    }
-    let value = result.value;
-    return CallResult.fromValue(value[0].toBytes());
-  }
-
   memberAddressByDelegateKey(param0: Address): Address {
     let result = super.call("memberAddressByDelegateKey", [
       EthereumValue.fromAddress(param0)
@@ -915,21 +846,6 @@ export class V2Moloch extends SmartContract {
         value[5].toBigInt()
       )
     );
-  }
-
-  minion(): Address {
-    let result = super.call("minion", []);
-
-    return result[0].toAddress();
-  }
-
-  try_minion(): CallResult<Address> {
-    let result = super.tryCall("minion", []);
-    if (result.reverted) {
-      return new CallResult();
-    }
-    let value = result.value;
-    return CallResult.fromValue(value[0].toAddress());
   }
 
   periodDuration(): BigInt {
@@ -1124,57 +1040,6 @@ export class V2Moloch extends SmartContract {
     return CallResult.fromValue(value[0].toBigInt());
   }
 
-  submitProposal(
-    applicant: Address,
-    sharesRequested: BigInt,
-    lootRequested: BigInt,
-    tributeOffered: BigInt,
-    tributeToken: Address,
-    paymentRequested: BigInt,
-    paymentToken: Address,
-    details: Bytes
-  ): BigInt {
-    let result = super.call("submitProposal", [
-      EthereumValue.fromAddress(applicant),
-      EthereumValue.fromUnsignedBigInt(sharesRequested),
-      EthereumValue.fromUnsignedBigInt(lootRequested),
-      EthereumValue.fromUnsignedBigInt(tributeOffered),
-      EthereumValue.fromAddress(tributeToken),
-      EthereumValue.fromUnsignedBigInt(paymentRequested),
-      EthereumValue.fromAddress(paymentToken),
-      EthereumValue.fromFixedBytes(details)
-    ]);
-
-    return result[0].toBigInt();
-  }
-
-  try_submitProposal(
-    applicant: Address,
-    sharesRequested: BigInt,
-    lootRequested: BigInt,
-    tributeOffered: BigInt,
-    tributeToken: Address,
-    paymentRequested: BigInt,
-    paymentToken: Address,
-    details: Bytes
-  ): CallResult<BigInt> {
-    let result = super.tryCall("submitProposal", [
-      EthereumValue.fromAddress(applicant),
-      EthereumValue.fromUnsignedBigInt(sharesRequested),
-      EthereumValue.fromUnsignedBigInt(lootRequested),
-      EthereumValue.fromUnsignedBigInt(tributeOffered),
-      EthereumValue.fromAddress(tributeToken),
-      EthereumValue.fromUnsignedBigInt(paymentRequested),
-      EthereumValue.fromAddress(paymentToken),
-      EthereumValue.fromFixedBytes(details)
-    ]);
-    if (result.reverted) {
-      return new CallResult();
-    }
-    let value = result.value;
-    return CallResult.fromValue(value[0].toBigInt());
-  }
-
   submitWhitelistProposal(tokenToWhitelist: Address, details: Bytes): BigInt {
     let result = super.call("submitWhitelistProposal", [
       EthereumValue.fromAddress(tokenToWhitelist),
@@ -1343,6 +1208,21 @@ export class V2Moloch extends SmartContract {
     let value = result.value;
     return CallResult.fromValue(value[0].toBigInt());
   }
+
+  wETH(): Address {
+    let result = super.call("wETH", []);
+
+    return result[0].toAddress();
+  }
+
+  try_wETH(): CallResult<Address> {
+    let result = super.tryCall("wETH", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toAddress());
+  }
 }
 
 export class ConstructorCall extends EthereumCall {
@@ -1394,16 +1274,20 @@ export class ConstructorCall__Inputs {
     return this._call.inputValues[7].value.toBigInt();
   }
 
-  get _summoningRate(): BigInt {
+  get _summonerStake(): BigInt {
     return this._call.inputValues[8].value.toBigInt();
   }
 
-  get _summoningTermination(): BigInt {
+  get _summoningDeposit(): BigInt {
     return this._call.inputValues[9].value.toBigInt();
   }
 
-  get _manifesto(): Bytes {
-    return this._call.inputValues[10].value.toBytes();
+  get _summoningRate(): BigInt {
+    return this._call.inputValues[10].value.toBigInt();
+  }
+
+  get _summoningTermination(): BigInt {
+    return this._call.inputValues[11].value.toBigInt();
   }
 }
 
@@ -1411,76 +1295,6 @@ export class ConstructorCall__Outputs {
   _call: ConstructorCall;
 
   constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-}
-
-export class AmendGovernanceCall extends EthereumCall {
-  get inputs(): AmendGovernanceCall__Inputs {
-    return new AmendGovernanceCall__Inputs(this);
-  }
-
-  get outputs(): AmendGovernanceCall__Outputs {
-    return new AmendGovernanceCall__Outputs(this);
-  }
-}
-
-export class AmendGovernanceCall__Inputs {
-  _call: AmendGovernanceCall;
-
-  constructor(call: AmendGovernanceCall) {
-    this._call = call;
-  }
-
-  get _depositToken(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get _minion(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get _periodDuration(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-
-  get _votingPeriodLength(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
-  }
-
-  get _gracePeriodLength(): BigInt {
-    return this._call.inputValues[4].value.toBigInt();
-  }
-
-  get _proposalDeposit(): BigInt {
-    return this._call.inputValues[5].value.toBigInt();
-  }
-
-  get _dilutionBound(): BigInt {
-    return this._call.inputValues[6].value.toBigInt();
-  }
-
-  get _processingReward(): BigInt {
-    return this._call.inputValues[7].value.toBigInt();
-  }
-
-  get _summoningRate(): BigInt {
-    return this._call.inputValues[8].value.toBigInt();
-  }
-
-  get _summoningTermination(): BigInt {
-    return this._call.inputValues[9].value.toBigInt();
-  }
-
-  get _manifesto(): Bytes {
-    return this._call.inputValues[10].value.toBytes();
-  }
-}
-
-export class AmendGovernanceCall__Outputs {
-  _call: AmendGovernanceCall;
-
-  constructor(call: AmendGovernanceCall) {
     this._call = call;
   }
 }
@@ -1541,6 +1355,40 @@ export class CollectTokensCall__Outputs {
   _call: CollectTokensCall;
 
   constructor(call: CollectTokensCall) {
+    this._call = call;
+  }
+}
+
+export class MakePaymentCall extends EthereumCall {
+  get inputs(): MakePaymentCall__Inputs {
+    return new MakePaymentCall__Inputs(this);
+  }
+
+  get outputs(): MakePaymentCall__Outputs {
+    return new MakePaymentCall__Outputs(this);
+  }
+}
+
+export class MakePaymentCall__Inputs {
+  _call: MakePaymentCall;
+
+  constructor(call: MakePaymentCall) {
+    this._call = call;
+  }
+
+  get paymentToken(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get payment(): BigInt {
+    return this._call.inputValues[1].value.toBigInt();
+  }
+}
+
+export class MakePaymentCall__Outputs {
+  _call: MakePaymentCall;
+
+  constructor(call: MakePaymentCall) {
     this._call = call;
   }
 }
@@ -1725,36 +1573,6 @@ export class RagequitCall__Outputs {
   _call: RagequitCall;
 
   constructor(call: RagequitCall) {
-    this._call = call;
-  }
-}
-
-export class SetMinionCall extends EthereumCall {
-  get inputs(): SetMinionCall__Inputs {
-    return new SetMinionCall__Inputs(this);
-  }
-
-  get outputs(): SetMinionCall__Outputs {
-    return new SetMinionCall__Outputs(this);
-  }
-}
-
-export class SetMinionCall__Inputs {
-  _call: SetMinionCall;
-
-  constructor(call: SetMinionCall) {
-    this._call = call;
-  }
-
-  get _minion(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class SetMinionCall__Outputs {
-  _call: SetMinionCall;
-
-  constructor(call: SetMinionCall) {
     this._call = call;
   }
 }

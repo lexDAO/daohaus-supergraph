@@ -1,7 +1,6 @@
 import { BigInt, log, Address, Bytes } from "@graphprotocol/graph-ts";
 import {
   SummonComplete,
-  AmendGovernance,
   MakeSummoningTribute,
   SubmitProposal,
   SubmitVote,
@@ -29,7 +28,6 @@ import {
 } from "../generated/schema";
 import {
   addVotedBadge,
-  addSummonBadge,
   addRageQuitBadge,
   addJailedCountBadge,
   addProposalSubmissionBadge,
@@ -224,7 +222,7 @@ export function createAndAddSummoner(
   newMember.molochAddress = event.address;
   newMember.memberAddress = summoner;
   newMember.delegateKey = summoner;
-  newMember.shares = BigInt.fromI32(1);
+  newMember.shares = BigInt.fromI32(0);
   newMember.loot = BigInt.fromI32(0);
   newMember.tokenTribute = BigInt.fromI32(0);
   newMember.didRagequit = false;
@@ -289,7 +287,6 @@ export function handleSummonComplete(event: SummonComplete): void {
   moloch.totalShares = BigInt.fromI32(0);
   moloch.summoningRate = event.params.summoningRate;
   moloch.summoningTermination = event.params.summoningTermination;
-  moloch.manifesto = event.params.manifesto;
   moloch.totalLoot = BigInt.fromI32(0);
   moloch.proposalCount = BigInt.fromI32(0);
   moloch.proposalQueueCount = BigInt.fromI32(0);
@@ -320,27 +317,11 @@ export function handleSummoningTribute(event: MakeSummoningTribute): void {
   moloch.totalShares = moloch.totalShares.plus(event.params.shares);
 
   //GUILD w/ tribute
-  addToBalance(molochId, GUILD, tributeTokenId, member.tokenTribute);
-}
-
-export function handleAmendGovernance(event: AmendGovernance): void {
-  let molochId = event.address.toHexString();
-  let moloch = Moloch.load(molochId);
-
-  moloch.depositToken = event.params.depositToken.toHexString();
-  moloch.minion = event.params.minion;
-  moloch.periodDuration = event.params.periodDuration;
-  moloch.votingPeriodLength = event.params.votingPeriodLength;
-  moloch.gracePeriodLength = event.params.gracePeriodLength;
-  moloch.proposalDeposit = event.params.proposalDeposit;
-  moloch.dilutionBound = event.params.dilutionBound;
-  moloch.processingReward = event.params.processingReward;
-  moloch.summoningRate = event.params.summoningRate;
-  moloch.summoningTermination = event.params.summoningTermination;
-  moloch.manifesto = event.params.manifesto;
-
-  moloch.save();
-}
+    // collect tribute from proposer and store it in Moloch ESCROW until the proposal is processed
+  if(event.params.tribute > BigInt.fromI32(0)) {
+      addToBalance(molochId, GUILD, tributeTokenId, event.params.tribute);
+    }
+  }
 
 export function handleSubmitProposal(event: SubmitProposal): void {
   let molochId = event.address.toHexString();

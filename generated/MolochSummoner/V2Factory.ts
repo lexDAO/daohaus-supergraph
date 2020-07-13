@@ -15,16 +15,16 @@ import {
   CallResult
 } from "@graphprotocol/graph-ts";
 
-export class Summoned extends EthereumEvent {
-  get params(): Summoned__Params {
-    return new Summoned__Params(this);
+export class SummonMoloch extends EthereumEvent {
+  get params(): SummonMoloch__Params {
+    return new SummonMoloch__Params(this);
   }
 }
 
-export class Summoned__Params {
-  _event: Summoned;
+export class SummonMoloch__Params {
+  _event: SummonMoloch;
 
-  constructor(event: Summoned) {
+  constructor(event: SummonMoloch) {
     this._event = event;
   }
 
@@ -51,36 +51,6 @@ export class V2Factory extends SmartContract {
     }
     let value = result.value;
     return CallResult.fromValue(value[0].toAddress());
-  }
-}
-
-export class ConstructorCall extends EthereumCall {
-  get inputs(): ConstructorCall__Inputs {
-    return new ConstructorCall__Inputs(this);
-  }
-
-  get outputs(): ConstructorCall__Outputs {
-    return new ConstructorCall__Outputs(this);
-  }
-}
-
-export class ConstructorCall__Inputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-
-  get _minionSummoner(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class ConstructorCall__Outputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
   }
 }
 
@@ -133,16 +103,20 @@ export class SummonMolochCall__Inputs {
     return this._call.inputValues[7].value.toBigInt();
   }
 
-  get _summoningRate(): BigInt {
+  get _summonerStake(): BigInt {
     return this._call.inputValues[8].value.toBigInt();
   }
 
-  get _summoningTermination(): BigInt {
+  get _summoningDeposit(): BigInt {
     return this._call.inputValues[9].value.toBigInt();
   }
 
-  get _manifesto(): Bytes {
-    return this._call.inputValues[10].value.toBytes();
+  get _summoningRate(): BigInt {
+    return this._call.inputValues[10].value.toBigInt();
+  }
+
+  get _summoningTermination(): BigInt {
+    return this._call.inputValues[11].value.toBigInt();
   }
 }
 
@@ -150,6 +124,36 @@ export class SummonMolochCall__Outputs {
   _call: SummonMolochCall;
 
   constructor(call: SummonMolochCall) {
+    this._call = call;
+  }
+}
+
+export class ConstructorCall extends EthereumCall {
+  get inputs(): ConstructorCall__Inputs {
+    return new ConstructorCall__Inputs(this);
+  }
+
+  get outputs(): ConstructorCall__Outputs {
+    return new ConstructorCall__Outputs(this);
+  }
+}
+
+export class ConstructorCall__Inputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+
+  get _minionSummoner(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class ConstructorCall__Outputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
     this._call = call;
   }
 }

@@ -43,6 +43,16 @@
       },
       {
         "internalType": "uint256",
+        "name": "_summonerStake",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_summoningDeposit",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "_summoningRate",
         "type": "uint256"
       },
@@ -50,89 +60,11 @@
         "internalType": "uint256",
         "name": "_summoningTermination",
         "type": "uint256"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_manifesto",
-        "type": "bytes32"
       }
     ],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "depositToken",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "minion",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "periodDuration",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "votingPeriodLength",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "gracePeriodLength",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "proposalDeposit",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "dilutionBound",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "processingReward",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "summoningRate",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "summoningTermination",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "manifesto",
-        "type": "bytes32"
-      }
-    ],
-    "name": "AmendGovernance",
-    "type": "event"
   },
   {
     "anonymous": false,
@@ -491,6 +423,18 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "summonerStake",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "summoningDeposit",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "summoningRate",
         "type": "uint256"
       },
@@ -499,12 +443,6 @@
         "internalType": "uint256",
         "name": "summoningTermination",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "manifesto",
-        "type": "bytes32"
       }
     ],
     "name": "SummonComplete",
@@ -616,71 +554,6 @@
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_depositToken",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_minion",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_periodDuration",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_votingPeriodLength",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_gracePeriodLength",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_proposalDeposit",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_dilutionBound",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_processingReward",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_summoningRate",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_summoningTermination",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_manifesto",
-        "type": "bytes32"
-      }
-    ],
-    "name": "amendGovernance",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -943,6 +816,26 @@
     "constant": false,
     "inputs": [
       {
+        "internalType": "address",
+        "name": "paymentToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "payment",
+        "type": "uint256"
+      }
+    ],
+    "name": "makePayment",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "tribute",
         "type": "uint256"
@@ -950,23 +843,8 @@
     ],
     "name": "makeSummoningTribute",
     "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "manifesto",
-    "outputs": [
-      {
-        "internalType": "bytes32",
-        "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
+    "payable": true,
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -1030,21 +908,6 @@
         "internalType": "uint256",
         "name": "jailed",
         "type": "uint256"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
-    "name": "minion",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
       }
     ],
     "payable": false,
@@ -1344,21 +1207,6 @@
     "constant": false,
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_minion",
-        "type": "address"
-      }
-    ],
-    "name": "setMinion",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
         "internalType": "uint256",
         "name": "proposalId",
         "type": "uint256"
@@ -1448,8 +1296,8 @@
         "type": "uint256"
       }
     ],
-    "payable": false,
-    "stateMutability": "nonpayable",
+    "payable": true,
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -1659,6 +1507,21 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "wETH",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "payable": false,
