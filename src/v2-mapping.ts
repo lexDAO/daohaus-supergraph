@@ -28,6 +28,7 @@ import {
 } from "../generated/schema";
 import {
   addVotedBadge,
+  addSummonBadge,
   addRageQuitBadge,
   addJailedCountBadge,
   addProposalSubmissionBadge,
@@ -222,7 +223,7 @@ export function createAndAddSummoner(
   newMember.molochAddress = event.address;
   newMember.memberAddress = summoner;
   newMember.delegateKey = summoner;
-  newMember.shares = BigInt.fromI32(0);
+  newMember.shares = BigInt.fromI32(1);
   newMember.loot = BigInt.fromI32(0);
   newMember.tokenTribute = BigInt.fromI32(0);
   newMember.didRagequit = false;
@@ -318,7 +319,7 @@ export function handleSummoningTribute(event: MakeSummoningTribute): void {
 
   //GUILD w/ tribute
     // collect tribute from proposer and store it in Moloch ESCROW until the proposal is processed
-  if(event.params.tribute > BigInt.fromI32(0)) {
+  if (event.params.tribute > BigInt.fromI32(0)) {
       addToBalance(molochId, GUILD, tributeTokenId, event.params.tribute);
     }
   }
