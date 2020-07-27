@@ -213,17 +213,17 @@ export function createAndAddSummoner(
   depositToken: Address,
   event: SummonMoloch
 ): string {
-  let moloch = Moloch.load(call.transaction.hash.toHex());
 
   let memberId = molochId.concat("-member-").concat(summoner.toHex());
   let newMember = new Member(memberId);
+  let moloch = Moloch.load(event.address.toHex());
 
   newMember.moloch = molochId;
   newMember.createdAt = event.block.timestamp.toString();
-  //newMember.molochAddress = event.address;
+  newMember.molochAddress = event.address;
   newMember.memberAddress = summoner;
   newMember.delegateKey = summoner;
-  newMember.shares = BigInt.fromI32(1);
+  newMember.shares = BigInt.fromI32(0);
   newMember.loot = BigInt.fromI32(0);
   newMember.tokenTribute = BigInt.fromI32(0);
   newMember.didRagequit = false;

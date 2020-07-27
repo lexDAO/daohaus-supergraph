@@ -6,9 +6,9 @@ dataSources:
     name: V2Factory
     network: rinkeby
     source:
-      address: "0xf4B4B807f1b9deC1E6D1590A2ff8A4EB0C4F3F16" #rinkeby address 
+      address: "0x455CfAa64b706BC0534bd08B9570aE7CbDDd7a0F" #kovan address 
       abi: V2Factory
-      startBlock: 6737981
+      startBlock: 19795396
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -29,7 +29,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: MolochV2Template
-    network: rinkeby # change to mainnet for that deploy
+    network: kovan # change to mainnet for that deploy
     source:
       abi: V2Moloch
     mapping:

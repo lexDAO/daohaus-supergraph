@@ -13,9 +13,14 @@ export function handleSummoned(event: SummonMoloch): void {
   let molochId = event.params.moloch.toHex();
   let moloch = new Moloch(molochId);
   let depositToken = event.params.depositToken;
+  let approvedTokens: string[] = [];
 
   let escrowTokenBalance: string[] = [];
   let guildTokenBalance: string[] = [];
+
+  approvedTokens.push(createAndApproveToken(molochId, depositToken));
+  escrowTokenBalance.push(createEscrowTokenBalance(molochId, depositToken));
+  guildTokenBalance.push(createGuildTokenBalance(molochId, depositToken));
 
   let eventSummoners = event.params.summoners;
   let summoners: string[] = [];
@@ -27,9 +32,9 @@ export function handleSummoned(event: SummonMoloch): void {
     );
   }
 
-  moloch.summoners = event.params.summoners;
+  moloch.summoners = summoners;
   moloch.summoningTime = event.params.summoningTime;
-  moloch.version = "2";
+  moloch.version = "2x";
   moloch.deleted = false;
   moloch.newContract = "1";
   moloch.summoningTime = event.params.summoningTime;
@@ -39,7 +44,9 @@ export function handleSummoned(event: SummonMoloch): void {
   moloch.proposalDeposit = event.params.proposalDeposit;
   moloch.dilutionBound = event.params.dilutionBound;
   moloch.processingReward = event.params.processingReward;
-  moloch.depositToken = event.params.depositToken; 
+  moloch.summoningRate = event.params.summoningRate;
+  moloch.summoningTermination = event.params.summoningTermination;
+  moloch.depositToken = approvedTokens[0]; 
   moloch.guildTokenBalance = guildTokenBalance;
   moloch.escrowTokenBalance = escrowTokenBalance;
   moloch.totalShares = BigInt.fromI32(0);

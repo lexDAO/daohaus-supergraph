@@ -7,9 +7,9 @@
         "type": "address[]"
       },
       {
-        "internalType": "address[]",
-        "name": "_approvedTokens",
-        "type": "address[]"
+        "internalType": "address",
+        "name": "_depositToken",
+        "type": "address"
       },
       {
         "internalType": "uint256",
@@ -42,9 +42,9 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint256",
-        "name": "_summonerStake",
-        "type": "uint256"
+        "internalType": "uint256[]",
+        "name": "_summonerShares",
+        "type": "uint256[]"
       },
       {
         "internalType": "uint256",
@@ -83,6 +83,37 @@
       }
     ],
     "name": "CancelProposal",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "caller",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "paymentToken",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "payment",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "details",
+        "type": "bytes32"
+      }
+    ],
+    "name": "MakeGuildPayment",
     "type": "event"
   },
   {
@@ -361,91 +392,6 @@
       }
     ],
     "name": "SubmitVote",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address[]",
-        "name": "summoners",
-        "type": "address[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "address[]",
-        "name": "tokens",
-        "type": "address[]"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "summoningTime",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "periodDuration",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "votingPeriodLength",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "gracePeriodLength",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "proposalDeposit",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "dilutionBound",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "processingReward",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "summonerStake",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "summoningDeposit",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "summoningRate",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "summoningTermination",
-        "type": "uint256"
-      }
-    ],
-    "name": "SummonComplete",
     "type": "event"
   },
   {
@@ -824,9 +770,14 @@
         "internalType": "uint256",
         "name": "payment",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "details",
+        "type": "bytes32"
       }
     ],
-    "name": "makePayment",
+    "name": "makeGuildPayment",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
