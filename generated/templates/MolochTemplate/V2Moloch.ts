@@ -37,6 +37,36 @@ export class CancelProposal__Params {
   }
 }
 
+export class MakeGuildPayment extends EthereumEvent {
+  get params(): MakeGuildPayment__Params {
+    return new MakeGuildPayment__Params(this);
+  }
+}
+
+export class MakeGuildPayment__Params {
+  _event: MakeGuildPayment;
+
+  constructor(event: MakeGuildPayment) {
+    this._event = event;
+  }
+
+  get caller(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get paymentToken(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get payment(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get details(): Bytes {
+    return this._event.parameters[3].value.toBytes();
+  }
+}
+
 export class MakeSummoningTribute extends EthereumEvent {
   get params(): MakeSummoningTribute__Params {
     return new MakeSummoningTribute__Params(this);
@@ -294,72 +324,6 @@ export class SubmitVote__Params {
 
   get uintVote(): i32 {
     return this._event.parameters[4].value.toI32();
-  }
-}
-
-export class SummonComplete extends EthereumEvent {
-  get params(): SummonComplete__Params {
-    return new SummonComplete__Params(this);
-  }
-}
-
-export class SummonComplete__Params {
-  _event: SummonComplete;
-
-  constructor(event: SummonComplete) {
-    this._event = event;
-  }
-
-  get summoners(): Bytes {
-    return this._event.parameters[0].value.toBytes();
-  }
-
-  get tokens(): Array<Address> {
-    return this._event.parameters[1].value.toAddressArray();
-  }
-
-  get summoningTime(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-
-  get periodDuration(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get votingPeriodLength(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
-  }
-
-  get gracePeriodLength(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-
-  get proposalDeposit(): BigInt {
-    return this._event.parameters[6].value.toBigInt();
-  }
-
-  get dilutionBound(): BigInt {
-    return this._event.parameters[7].value.toBigInt();
-  }
-
-  get processingReward(): BigInt {
-    return this._event.parameters[8].value.toBigInt();
-  }
-
-  get summonerStake(): BigInt {
-    return this._event.parameters[9].value.toBigInt();
-  }
-
-  get summoningDeposit(): BigInt {
-    return this._event.parameters[10].value.toBigInt();
-  }
-
-  get summoningRate(): BigInt {
-    return this._event.parameters[11].value.toBigInt();
-  }
-
-  get summoningTermination(): BigInt {
-    return this._event.parameters[12].value.toBigInt();
   }
 }
 
@@ -1246,8 +1210,8 @@ export class ConstructorCall__Inputs {
     return this._call.inputValues[0].value.toAddressArray();
   }
 
-  get _approvedTokens(): Array<Address> {
-    return this._call.inputValues[1].value.toAddressArray();
+  get _depositToken(): Address {
+    return this._call.inputValues[1].value.toAddress();
   }
 
   get _periodDuration(): BigInt {
@@ -1274,8 +1238,8 @@ export class ConstructorCall__Inputs {
     return this._call.inputValues[7].value.toBigInt();
   }
 
-  get _summonerStake(): BigInt {
-    return this._call.inputValues[8].value.toBigInt();
+  get _summonerShares(): Array<BigInt> {
+    return this._call.inputValues[8].value.toBigIntArray();
   }
 
   get _summoningDeposit(): BigInt {
@@ -1359,20 +1323,20 @@ export class CollectTokensCall__Outputs {
   }
 }
 
-export class MakePaymentCall extends EthereumCall {
-  get inputs(): MakePaymentCall__Inputs {
-    return new MakePaymentCall__Inputs(this);
+export class MakeGuildPaymentCall extends EthereumCall {
+  get inputs(): MakeGuildPaymentCall__Inputs {
+    return new MakeGuildPaymentCall__Inputs(this);
   }
 
-  get outputs(): MakePaymentCall__Outputs {
-    return new MakePaymentCall__Outputs(this);
+  get outputs(): MakeGuildPaymentCall__Outputs {
+    return new MakeGuildPaymentCall__Outputs(this);
   }
 }
 
-export class MakePaymentCall__Inputs {
-  _call: MakePaymentCall;
+export class MakeGuildPaymentCall__Inputs {
+  _call: MakeGuildPaymentCall;
 
-  constructor(call: MakePaymentCall) {
+  constructor(call: MakeGuildPaymentCall) {
     this._call = call;
   }
 
@@ -1383,12 +1347,16 @@ export class MakePaymentCall__Inputs {
   get payment(): BigInt {
     return this._call.inputValues[1].value.toBigInt();
   }
+
+  get details(): Bytes {
+    return this._call.inputValues[2].value.toBytes();
+  }
 }
 
-export class MakePaymentCall__Outputs {
-  _call: MakePaymentCall;
+export class MakeGuildPaymentCall__Outputs {
+  _call: MakeGuildPaymentCall;
 
-  constructor(call: MakePaymentCall) {
+  constructor(call: MakeGuildPaymentCall) {
     this._call = call;
   }
 }

@@ -23,7 +23,7 @@ dataSources:
         - name: Erc20Bytes32
           file: ./abis/Erc20Bytes32.json
       eventHandlers:
-        - event: SummonMoloch(indexed address)
+        - event: SummonMoloch(indexed address,indexed address[],indexed address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256[],uint256,uint256,uint256)
           handler: handleSummoned
       file: ./src/factory-mapping.ts
 templates:

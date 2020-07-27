@@ -1,7 +1,6 @@
 import { BigInt, log, Address, Bytes } from "@graphprotocol/graph-ts";
 import {
   V2Moloch,
-  SummonComplete,
   MakeSummoningTribute,
   SubmitProposal,
   SubmitVote,
@@ -36,7 +35,7 @@ import {
   addMembershipBadge,
   addProposalProcessorBadge,
 } from "./badges";
-import { SummonMolochCall } from "../generated/MolochSummoner/V2Factory";
+import { SummonMolochCall, SummonMoloch } from "../generated/MolochSummoner/V2Factory";
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 let ESCROW = Address.fromString("0x000000000000000000000000000000000000dead");
@@ -211,8 +210,8 @@ export function createAndApproveToken(molochId: string, token: Bytes): string {
 export function createAndAddSummoner(
   molochId: string,
   summoner: Bytes,
-  tokens: Address[],
-  call: SummonMolochCall
+  depositToken: Address,
+  event: SummonMoloch
 ): string {
   let moloch = Moloch.load(call.transaction.hash.toHex());
 
@@ -220,7 +219,7 @@ export function createAndAddSummoner(
   let newMember = new Member(memberId);
 
   newMember.moloch = molochId;
-  newMember.createdAt = call.block.timestamp.toString();
+  newMember.createdAt = event.block.timestamp.toString();
   //newMember.molochAddress = event.address;
   newMember.memberAddress = summoner;
   newMember.delegateKey = summoner;
@@ -238,11 +237,8 @@ export function createAndAddSummoner(
   moloch.totalShares = moloch.totalShares.plus(BigInt.fromI32(0));
 
   //Set summoner summoner balances for approved tokens to zero
-  for (let i = 0; i < tokens.length; i++) {
-    let token = tokens[i];
-    let tokenId = molochId.concat("-token-").concat(token.toHex());
+    let tokenId = molochId.concat("-token-").concat(depositToken.toHex());
     createMemberTokenBalance(molochId, summoner, tokenId, BigInt.fromI32(0));
-  }
 
   return memberId;
 }

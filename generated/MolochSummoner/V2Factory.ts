@@ -31,6 +31,58 @@ export class SummonMoloch__Params {
   get moloch(): Address {
     return this._event.parameters[0].value.toAddress();
   }
+
+  get summoners(): Bytes {
+    return this._event.parameters[1].value.toBytes();
+  }
+
+  get depositToken(): Address {
+    return this._event.parameters[2].value.toAddress();
+  }
+
+  get summoningTime(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
+
+  get periodDuration(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
+  }
+
+  get votingPeriodLength(): BigInt {
+    return this._event.parameters[5].value.toBigInt();
+  }
+
+  get gracePeriodLength(): BigInt {
+    return this._event.parameters[6].value.toBigInt();
+  }
+
+  get proposalDeposit(): BigInt {
+    return this._event.parameters[7].value.toBigInt();
+  }
+
+  get dilutionBound(): BigInt {
+    return this._event.parameters[8].value.toBigInt();
+  }
+
+  get processingReward(): BigInt {
+    return this._event.parameters[9].value.toBigInt();
+  }
+
+  get summonerStake(): Array<BigInt> {
+    return this._event.parameters[10].value.toBigIntArray();
+  }
+
+  get summoningDeposit(): BigInt {
+    return this._event.parameters[11].value.toBigInt();
+  }
+
+  get summoningRate(): BigInt {
+    return this._event.parameters[12].value.toBigInt();
+  }
+
+  get summoningTermination(): BigInt {
+    return this._event.parameters[13].value.toBigInt();
+  }
 }
 
 export class V2Factory extends SmartContract {
@@ -51,80 +103,6 @@ export class V2Factory extends SmartContract {
     }
     let value = result.value;
     return CallResult.fromValue(value[0].toAddress());
-  }
-}
-
-export class SummonMolochCall extends EthereumCall {
-  get inputs(): SummonMolochCall__Inputs {
-    return new SummonMolochCall__Inputs(this);
-  }
-
-  get outputs(): SummonMolochCall__Outputs {
-    return new SummonMolochCall__Outputs(this);
-  }
-}
-
-export class SummonMolochCall__Inputs {
-  _call: SummonMolochCall;
-
-  constructor(call: SummonMolochCall) {
-    this._call = call;
-  }
-
-  get _summoners(): Array<Address> {
-    return this._call.inputValues[0].value.toAddressArray();
-  }
-
-  get _approvedTokens(): Array<Address> {
-    return this._call.inputValues[1].value.toAddressArray();
-  }
-
-  get _periodDuration(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-
-  get _votingPeriodLength(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
-  }
-
-  get _gracePeriodLength(): BigInt {
-    return this._call.inputValues[4].value.toBigInt();
-  }
-
-  get _proposalDeposit(): BigInt {
-    return this._call.inputValues[5].value.toBigInt();
-  }
-
-  get _dilutionBound(): BigInt {
-    return this._call.inputValues[6].value.toBigInt();
-  }
-
-  get _processingReward(): BigInt {
-    return this._call.inputValues[7].value.toBigInt();
-  }
-
-  get _summonerStake(): BigInt {
-    return this._call.inputValues[8].value.toBigInt();
-  }
-
-  get _summoningDeposit(): BigInt {
-    return this._call.inputValues[9].value.toBigInt();
-  }
-
-  get _summoningRate(): BigInt {
-    return this._call.inputValues[10].value.toBigInt();
-  }
-
-  get _summoningTermination(): BigInt {
-    return this._call.inputValues[11].value.toBigInt();
-  }
-}
-
-export class SummonMolochCall__Outputs {
-  _call: SummonMolochCall;
-
-  constructor(call: SummonMolochCall) {
-    this._call = call;
   }
 }
 
@@ -154,6 +132,80 @@ export class ConstructorCall__Outputs {
   _call: ConstructorCall;
 
   constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+}
+
+export class SummonMolochCall extends EthereumCall {
+  get inputs(): SummonMolochCall__Inputs {
+    return new SummonMolochCall__Inputs(this);
+  }
+
+  get outputs(): SummonMolochCall__Outputs {
+    return new SummonMolochCall__Outputs(this);
+  }
+}
+
+export class SummonMolochCall__Inputs {
+  _call: SummonMolochCall;
+
+  constructor(call: SummonMolochCall) {
+    this._call = call;
+  }
+
+  get _summoners(): Array<Address> {
+    return this._call.inputValues[0].value.toAddressArray();
+  }
+
+  get _depositToken(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get _periodDuration(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+
+  get _votingPeriodLength(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
+  }
+
+  get _gracePeriodLength(): BigInt {
+    return this._call.inputValues[4].value.toBigInt();
+  }
+
+  get _proposalDeposit(): BigInt {
+    return this._call.inputValues[5].value.toBigInt();
+  }
+
+  get _dilutionBound(): BigInt {
+    return this._call.inputValues[6].value.toBigInt();
+  }
+
+  get _processingReward(): BigInt {
+    return this._call.inputValues[7].value.toBigInt();
+  }
+
+  get _summonerShares(): Array<BigInt> {
+    return this._call.inputValues[8].value.toBigIntArray();
+  }
+
+  get _summoningDeposit(): BigInt {
+    return this._call.inputValues[9].value.toBigInt();
+  }
+
+  get _summoningRate(): BigInt {
+    return this._call.inputValues[10].value.toBigInt();
+  }
+
+  get _summoningTermination(): BigInt {
+    return this._call.inputValues[11].value.toBigInt();
+  }
+}
+
+export class SummonMolochCall__Outputs {
+  _call: SummonMolochCall;
+
+  constructor(call: SummonMolochCall) {
     this._call = call;
   }
 }

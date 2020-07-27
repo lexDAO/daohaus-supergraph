@@ -12,18 +12,10 @@ export function handleSummoned(event: SummonMoloch): void {
 
   let molochId = event.params.moloch.toHex();
   let moloch = new Moloch(molochId);
-  let tokens = event.params.tokens;
-  let approvedTokens: string[] = [];
+  let depositToken = event.params.depositToken;
 
   let escrowTokenBalance: string[] = [];
   let guildTokenBalance: string[] = [];
-
-  for (let i = 0; i < tokens.length; i++) {
-    let token = tokens[i];
-    approvedTokens.push(createAndApproveToken(molochId, token));
-    escrowTokenBalance.push(createEscrowTokenBalance(molochId, token));
-    guildTokenBalance.push(createGuildTokenBalance(molochId, token));
-  }
 
   let eventSummoners = event.params.summoners;
   let summoners: string[] = [];
@@ -31,27 +23,26 @@ export function handleSummoned(event: SummonMoloch): void {
   for (let i = 0; i < eventSummoners.length; i++) {
     let summoner = eventSummoners[i];
     summoners.push(
-      createAndAddSummoner(molochId, summoner as Bytes, tokens, event)
+      createAndAddSummoner(molochId, summoner as Bytes, depositToken, event)
     );
   }
 
-  moloch.summoner = event.params.summoner;
-  moloch.summoningTime = event.params._summoningTime;
-  moloch.title = event.params.title;
+  moloch.summoners = event.params.summoners;
+  moloch.summoningTime = event.params.summoningTime;
   moloch.version = "2";
   moloch.deleted = false;
   moloch.newContract = "1";
-  moloch.periodDuration = event.params._periodDuration;
-  moloch.votingPeriodLength = event.params._votingPeriodLength;
-  moloch.gracePeriodLength = event.params._gracePeriodLength;
-  moloch.proposalDeposit = event.params._proposalDeposit;
-  moloch.dilutionBound = event.params._dilutionBound;
-  moloch.processingReward = event.params._processingReward;
-  moloch.depositToken = approvedTokens[0];
-  moloch.approvedTokens = approvedTokens;
+  moloch.summoningTime = event.params.summoningTime;
+  moloch.periodDuration = event.params.periodDuration;
+  moloch.votingPeriodLength = event.params.votingPeriodLength;
+  moloch.gracePeriodLength = event.params.gracePeriodLength;
+  moloch.proposalDeposit = event.params.proposalDeposit;
+  moloch.dilutionBound = event.params.dilutionBound;
+  moloch.processingReward = event.params.processingReward;
+  moloch.depositToken = event.params.depositToken; 
   moloch.guildTokenBalance = guildTokenBalance;
   moloch.escrowTokenBalance = escrowTokenBalance;
-  moloch.totalShares = BigInt.fromI32(1);
+  moloch.totalShares = BigInt.fromI32(0);
   moloch.totalLoot = BigInt.fromI32(0);
   moloch.proposalCount = BigInt.fromI32(0);
   moloch.proposalQueueCount = BigInt.fromI32(0);
