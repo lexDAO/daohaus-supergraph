@@ -243,6 +243,23 @@ export class Moloch extends Entity {
     this.set("summoningRate", Value.fromBigInt(value));
   }
 
+  get summoningDeposit(): BigInt | null {
+    let value = this.get("summoningDeposit");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set summoningDeposit(value: BigInt | null) {
+    if (value === null) {
+      this.unset("summoningDeposit");
+    } else {
+      this.set("summoningDeposit", Value.fromBigInt(value as BigInt));
+    }
+  }
+
   get tokens(): Array<string> | null {
     let value = this.get("tokens");
     if (value === null) {

@@ -6,9 +6,9 @@ dataSources:
     name: V2Factory
     network: rinkeby
     source:
-      address: "0x455CfAa64b706BC0534bd08B9570aE7CbDDd7a0F" #kovan address 
+      address: "0x17453D174e3FE225Cac01207a39280a33bA79a68" #kovan address 
       abi: V2Factory
-      startBlock: 19795396
+      startBlock: 19795472
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -23,7 +23,7 @@ dataSources:
         - name: Erc20Bytes32
           file: ./abis/Erc20Bytes32.json
       eventHandlers:
-        - event: SummonMoloch(indexed address,indexed address[],indexed address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256[],uint256,uint256,uint256)
+        - event: SummonMoloch(indexed address,address[],indexed address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256[],uint256,uint256,uint256)
           handler: handleSummoned
       file: ./src/factory-mapping.ts 
 templates:

@@ -35,7 +35,7 @@ import {
   addMembershipBadge,
   addProposalProcessorBadge,
 } from "./badges";
-import { SummonMolochCall, SummonMoloch } from "../generated/MolochSummoner/V2Factory";
+import { SummonMoloch } from "../generated/MolochSummoner/V2Factory";
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 let ESCROW = Address.fromString("0x000000000000000000000000000000000000dead");
@@ -109,10 +109,12 @@ export function createMemberTokenBalance(
   let memberId = molochId.concat("-member-").concat(member.toHex());
   let memberTokenBalanceId = token.concat("-member-").concat(member.toHex());
   let memberTokenBalance = new TokenBalance(memberTokenBalanceId);
+  log.info('My token creatMemberTokenBalance amt is: {}', [amount.toString()])
 
   memberTokenBalance.moloch = molochId;
   memberTokenBalance.token = token;
   memberTokenBalance.tokenBalance = amount;
+  log.info('My token tokenBalance is: {}', [memberTokenBalance.tokenBalance.toString()])
   memberTokenBalance.member = memberId;
   memberTokenBalance.guildBank = false;
   memberTokenBalance.ecrowBank = false;
@@ -209,93 +211,47 @@ export function createAndApproveToken(molochId: string, token: Bytes): string {
 // used to create multiple summoners at time of summoning
 export function createAndAddSummoner(
   molochId: string,
-  summoner: Bytes,
+  summoner: Address,
   depositToken: Address,
   event: SummonMoloch
 ): string {
 
   let memberId = molochId.concat("-member-").concat(summoner.toHex());
-  let newMember = new Member(memberId);
+  let member = new Member(memberId);
+  log.info('My memberId is: {}', [memberId])
   let moloch = Moloch.load(event.address.toHex());
 
-  newMember.moloch = molochId;
-  newMember.createdAt = event.block.timestamp.toString();
-  newMember.molochAddress = event.address;
-  newMember.memberAddress = summoner;
-  newMember.delegateKey = summoner;
-  newMember.shares = BigInt.fromI32(0);
-  newMember.loot = BigInt.fromI32(0);
-  newMember.tokenTribute = BigInt.fromI32(0);
-  newMember.didRagequit = false;
-  newMember.isSummoner = true;
-  newMember.proposedToKick = false;
-  newMember.kicked = false;
-
-  newMember.save();
-
-  addMembershipBadge(summoner);
-  moloch.totalShares = moloch.totalShares.plus(BigInt.fromI32(0));
+  member.moloch = molochId;
+  log.info('My moloch is: {}', [molochId])
+  member.createdAt = event.block.timestamp.toString();
+  log.info('My created at is: {}', [member.createdAt])
+  member.molochAddress = event.address;
+  member.memberAddress = summoner;
+  member.delegateKey = summoner;
+  member.shares = BigInt.fromI32(0);
+  log.info('My member shares is: {}', [member.shares.toString()])
+  member.loot = BigInt.fromI32(0);
+  log.info('My loot at is: {}', [member.shares.toString()])
+  member.tokenTribute = BigInt.fromI32(0);
+  log.info('My tokenTribute at is: {}', [member.tokenTribute.toString()])
+  member.didRagequit = false;
+  member.isSummoner = true;
+  member.exists = true;
+  member.proposedToKick = false;
+  member.kicked = false;
 
   //Set summoner summoner balances for approved tokens to zero
     let tokenId = molochId.concat("-token-").concat(depositToken.toHex());
-    createMemberTokenBalance(molochId, summoner, tokenId, BigInt.fromI32(0));
+    let amount = BigInt.fromI32(0);
+    log.info('My token amount is: {}', [amount.toString()])
+    createMemberTokenBalance(molochId, summoner, tokenId, amount);
+  
+  member.save();
+
+  addMembershipBadge(summoner);
 
   return memberId;
 }
-
-// export function handleSummonComplete(event: SummonComplete): void {
-//   let moloch = Moloch.load(event.address.toHex());
-//   let molochId = event.address.toHexString();
-
-//   let tokens = event.params.tokens;
-//   let approvedTokens: string[] = [];
-//   let escrowTokenBalance: string[] = [];
-//   let guildTokenBalance: string[] = [];
-
-//   for (let i = 0; i < tokens.length; i++) {
-//     let token = tokens[i];
-//     approvedTokens.push(createAndApproveToken(molochId, token));
-//     escrowTokenBalance.push(createEscrowTokenBalance(molochId, token));
-//     guildTokenBalance.push(createGuildTokenBalance(molochId, token));
-//   }
-
-//   // let eventSummoners = event.params.summoners;
-//   // let summoners: string[] = [];
-
-//   // for (let i = 0; i < eventSummoners.length; i++) {
-//   //   let summoner = eventSummoners[i];
-//   //   summoners.push(
-//   //     createAndAddSummoner(molochId, summoner as Bytes, tokens, event)
-//   //   );
-//   // }
-
-//   moloch.summoners = summoners;
-//   moloch.summoningTime = event.params.summoningTime;
-//   moloch.version = "2x";
-//   moloch.periodDuration = event.params.periodDuration;
-//   moloch.votingPeriodLength = event.params.votingPeriodLength;
-//   moloch.gracePeriodLength = event.params.gracePeriodLength;
-//   moloch.proposalDeposit = event.params.proposalDeposit;
-//   moloch.dilutionBound = event.params.dilutionBound;
-//   moloch.processingReward = event.params.processingReward;
-//   moloch.depositToken = approvedTokens[0];
-//   moloch.approvedTokens = approvedTokens;
-//   moloch.guildTokenBalance = guildTokenBalance;
-//   moloch.escrowTokenBalance = escrowTokenBalance;
-//   moloch.totalShares = BigInt.fromI32(0);
-//   moloch.summoningRate = event.params.summoningRate;
-//   moloch.summoningTermination = event.params.summoningTermination;
-//   moloch.totalLoot = BigInt.fromI32(0);
-//   moloch.proposalCount = BigInt.fromI32(0);
-//   moloch.proposalQueueCount = BigInt.fromI32(0);
-//   moloch.proposedToJoin = new Array<string>();
-//   moloch.proposedToWhitelist = new Array<string>();
-//   moloch.proposedToKick = new Array<string>();
-//   moloch.proposedToFund = new Array<string>();
-//   moloch.proposedToTrade = new Array<string>();
-
-//   moloch.save();
-// }
 
 export function handleSummoningTribute(event: MakeSummoningTribute): void {
   let molochId = event.address.toHexString();

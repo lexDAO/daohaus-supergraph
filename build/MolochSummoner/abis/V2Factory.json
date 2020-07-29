@@ -21,7 +21,7 @@
         "type": "address"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "address[]",
         "name": "summoners",
         "type": "address[]"

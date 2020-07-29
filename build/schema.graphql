@@ -12,11 +12,11 @@ type Moloch @entity {
   proposalDeposit: BigInt!
   dilutionBound: BigInt!
   processingReward: BigInt!
-  depositToken: Token
-  approvedTokens: [Token!]!
+  depositToken: Token!
+  approvedTokens: [Token!]
   guildBankAddress: Bytes
-  summoningTermination: BigInt!
-  summoningRate: BigInt!
+  summoningTermination: BigInt
+  summoningRate: BigInt
   tokens: [Token!] @derivedFrom(field: "moloch")
   members: [Member!] @derivedFrom(field: "moloch")
   tokenBalances: [TokenBalance!] @derivedFrom(field: "moloch")
