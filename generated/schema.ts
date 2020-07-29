@@ -42,13 +42,21 @@ export class Moloch extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get summoner(): Bytes {
-    let value = this.get("summoner");
-    return value.toBytes();
+  get summoners(): Array<string> | null {
+    let value = this.get("summoners");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
   }
 
-  set summoner(value: Bytes) {
-    this.set("summoner", Value.fromBytes(value));
+  set summoners(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("summoners");
+    } else {
+      this.set("summoners", Value.fromStringArray(value as Array<string>));
+    }
   }
 
   get title(): string | null {
@@ -214,6 +222,41 @@ export class Moloch extends Entity {
       this.unset("guildBankAddress");
     } else {
       this.set("guildBankAddress", Value.fromBytes(value as Bytes));
+    }
+  }
+
+  get summoningTermination(): BigInt {
+    let value = this.get("summoningTermination");
+    return value.toBigInt();
+  }
+
+  set summoningTermination(value: BigInt) {
+    this.set("summoningTermination", Value.fromBigInt(value));
+  }
+
+  get summoningRate(): BigInt {
+    let value = this.get("summoningRate");
+    return value.toBigInt();
+  }
+
+  set summoningRate(value: BigInt) {
+    this.set("summoningRate", Value.fromBigInt(value));
+  }
+
+  get summoningDeposit(): BigInt | null {
+    let value = this.get("summoningDeposit");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set summoningDeposit(value: BigInt | null) {
+    if (value === null) {
+      this.unset("summoningDeposit");
+    } else {
+      this.set("summoningDeposit", Value.fromBigInt(value as BigInt));
     }
   }
 
@@ -808,13 +851,21 @@ export class Member extends Entity {
     }
   }
 
-  get tokenTribute(): BigInt {
+  get tokenTribute(): BigInt | null {
     let value = this.get("tokenTribute");
-    return value.toBigInt();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set tokenTribute(value: BigInt) {
-    this.set("tokenTribute", Value.fromBigInt(value));
+  set tokenTribute(value: BigInt | null) {
+    if (value === null) {
+      this.unset("tokenTribute");
+    } else {
+      this.set("tokenTribute", Value.fromBigInt(value as BigInt));
+    }
   }
 
   get didRagequit(): boolean {
@@ -824,6 +875,15 @@ export class Member extends Entity {
 
   set didRagequit(value: boolean) {
     this.set("didRagequit", Value.fromBoolean(value));
+  }
+
+  get isSummoner(): boolean {
+    let value = this.get("isSummoner");
+    return value.toBoolean();
+  }
+
+  set isSummoner(value: boolean) {
+    this.set("isSummoner", Value.fromBoolean(value));
   }
 
   get votes(): Array<string> | null {
@@ -1389,13 +1449,13 @@ export class Proposal extends Entity {
     this.set("trade", Value.fromBoolean(value));
   }
 
-  get details(): string {
+  get details(): Bytes {
     let value = this.get("details");
-    return value.toString();
+    return value.toBytes();
   }
 
-  set details(value: string) {
-    this.set("details", Value.fromString(value));
+  set details(value: Bytes) {
+    this.set("details", Value.fromBytes(value));
   }
 
   get maxTotalSharesAndLootAtYesVote(): BigInt | null {
