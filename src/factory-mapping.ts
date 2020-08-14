@@ -1,4 +1,4 @@
-import { BigInt, log, Bytes, Address } from "@graphprotocol/graph-ts";
+import { BigInt, log, ByteArray, Address } from "@graphprotocol/graph-ts";
 import { SummonMoloch } from "../generated/MolochSummoner/V2Factory";
 
 import { MolochTemplate } from "../generated/templates";
@@ -8,12 +8,11 @@ import { createAndApproveToken, createEscrowTokenBalance, createGuildTokenBalanc
 
 export function handleSummoned(event: SummonMoloch): void {
   
-  MolochTemplate.create(event.params.moloch);
+  MolochTemplate.create(event.params.baal);
 
-  let molochId = event.params.moloch.toHex();
+  let molochId = event.params.baal.toHex();
   let moloch = new Moloch(molochId);
   let depositToken = event.params.depositToken;
-  log.info('My value is: {}', [depositToken.toHexString()])
   let approvedTokens: string[] = [];
 
   let escrowTokenBalance: string[] = [];
@@ -23,24 +22,26 @@ export function handleSummoned(event: SummonMoloch): void {
   escrowTokenBalance.push(createEscrowTokenBalance(molochId, depositToken));
   guildTokenBalance.push(createGuildTokenBalance(molochId, depositToken));
 
-  let eventSummoners = event.params.summoners;
+  let eventSummoners = event.params.summoner;
   let summoners: string[] = [];
 
-  moloch.summoners = summoners;
+  let eventSummonerShares = event.params.summonerShares;
+
+
+  
+
+  moloch.summoner = summoners;
+  moloch.summonerShares = new Array<i32>();
   moloch.summoningTime = event.params.summoningTime;
-  log.info('My summoningTime value is: {}', [moloch.summoningTime.toString()])
   moloch.version = "2x";
   moloch.deleted = false;
   moloch.newContract = "1";
   moloch.periodDuration = event.params.periodDuration;
-  log.info('My period duration is: {}', [moloch.periodDuration.toString()])
   moloch.votingPeriodLength = event.params.votingPeriodLength;
   moloch.gracePeriodLength = event.params.gracePeriodLength;
   moloch.proposalDeposit = event.params.proposalDeposit;
   moloch.dilutionBound = event.params.dilutionBound;
   moloch.processingReward = event.params.processingReward;
-  moloch.summoningRate = event.params.summoningRate;
-  moloch.summoningTermination = event.params.summoningTermination;
   moloch.summoningDeposit = event.params.summoningDeposit;
   moloch.depositToken = depositToken.toString(); 
   moloch.guildTokenBalance = guildTokenBalance;
@@ -56,11 +57,18 @@ export function handleSummoned(event: SummonMoloch): void {
   moloch.proposedToFund = new Array<string>();
   moloch.proposedToTrade = new Array<string>();
 
+  /*
+  Used for summoning circle moloch
+  moloch.summoningRate = event.params.summoningRate;
+  moloch.summoningTermination = event.params.summoningTermination;
+  */
+
   for (let i = 0; i < eventSummoners.length; i++) {
     let summoner = eventSummoners[i];
-    log.info('My summoner is: {}', [summoner.toHexString()])
+    let shares = eventSummonerShares[i];
+    
     summoners.push(
-      createAndAddSummoner(molochId, summoner, depositToken, event)
+      createAndAddSummoner(molochId, summoner, shares, depositToken, event)
     );
   }
 
