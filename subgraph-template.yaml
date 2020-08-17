@@ -4,11 +4,12 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: V2Factory
-    network: rinkeby
+    network: mainnet #rinkeby - for test
     source:
-      address: "0x17453D174e3FE225Cac01207a39280a33bA79a68" #kovan address 
+    #  address: "0x8bd70dA40aDe30662c9cf492A4EbAA7e1a65Df44" # rinkeby
+     address: "0x40C90ec89dd4C814E91594d7AA02E9c70fFE4DF1" # mainnet 
       abi: V2Factory
-      startBlock: 19795472
+      startBlock: 6006595
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -23,13 +24,13 @@ dataSources:
         - name: Erc20Bytes32
           file: ./abis/Erc20Bytes32.json
       eventHandlers:
-        - event: SummonMoloch(indexed address,address[],indexed address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256[],uint256,uint256,uint256)
+        - event: SummonMoloch(indexed address,address,address,address[],uint256[],uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleSummoned
       file: ./src/factory-mapping.ts 
 templates:
   - kind: ethereum/contract
     name: MolochV2Template
-    network: kovan # change to mainnet for that deploy
+    network: mainnet #rinkeby - for test
     source:
       abi: V2Moloch
     mapping:
@@ -53,9 +54,9 @@ templates:
         - name: Erc20Bytes32
           file: ./abis/Erc20Bytes32.json
       eventHandlers:
-        - event: MakeSummoningTribute(indexed address,indexed uint256,indexed uint256)
-          handler: handleSummoningTribute  
-        - event: SubmitProposal(indexed address,uint256,uint256,uint256,address,uint256,address,bytes32,bool[6],uint256,indexed address,indexed address)
+        #- event: MakeSummoningTribute(indexed address,indexed uint256,indexed uint256)
+        #  handler: handleSummoningTribute  
+        - event: SubmitProposal(indexed address,uint256,uint256,uint256,address,uint256,address,bytes32,uint8[7],bytes,uint256,indexed address,indexed address)
           handler: handleSubmitProposal
         - event: SubmitVote(uint256,indexed uint256,indexed address,indexed address,uint8)
           handler: handleSubmitVote

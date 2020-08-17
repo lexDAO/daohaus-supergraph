@@ -1,7 +1,6 @@
 import { BigInt, log, Address, Bytes } from "@graphprotocol/graph-ts";
 import {
   V2Moloch,
-  MakeSummoningTribute,
   SubmitProposal,
   SubmitVote,
   ProcessProposal,
@@ -212,6 +211,7 @@ export function createAndApproveToken(molochId: string, token: Bytes): string {
 export function createAndAddSummoner(
   molochId: string,
   summoner: Address,
+  shares: BigInt,
   depositToken: Address,
   event: SummonMoloch
 ): string {
@@ -228,7 +228,7 @@ export function createAndAddSummoner(
   member.molochAddress = event.address;
   member.memberAddress = summoner;
   member.delegateKey = summoner;
-  member.shares = BigInt.fromI32(0);
+  member.shares = shares;
   log.info('My member shares is: {}', [member.shares.toString()])
   member.loot = BigInt.fromI32(0);
   log.info('My loot at is: {}', [member.shares.toString()])
@@ -253,29 +253,30 @@ export function createAndAddSummoner(
   return memberId;
 }
 
-export function handleSummoningTribute(event: MakeSummoningTribute): void {
-  let molochId = event.address.toHexString();
-  let member = Member.load(
-    molochId.concat("-member-").concat(event.params.memberAddress.toHex())
-  );
-  //load moloch to get depositToken
-  let moloch = Moloch.load(molochId);
+// @DEV - Used for Summoning Circle Moloch2x only
+// export function handleSummoningTribute(event: MakeSummoningTribute): void {
+//   let molochId = event.address.toHexString();
+//   let member = Member.load(
+//     molochId.concat("-member-").concat(event.params.memberAddress.toHex())
+//   );
+//   //load moloch to get depositToken
+//   let moloch = Moloch.load(molochId);
 
-  let tributeTokenId = moloch.depositToken;
+//   let tributeTokenId = moloch.depositToken;
 
-  member.tokenTribute = event.params.tribute;
-  member.shares = member.shares.plus(event.params.shares);
-  member.save();
+//   member.tokenTribute = event.params.tribute;
+//   member.shares = member.shares.plus(event.params.shares);
+//   member.save();
 
-  //update shares
-  moloch.totalShares = moloch.totalShares.plus(event.params.shares);
+//   //update shares
+//   moloch.totalShares = moloch.totalShares.plus(event.params.shares);
 
-  //GUILD w/ tribute
-    // collect tribute from proposer and store it in Moloch ESCROW until the proposal is processed
-  if (event.params.tribute > BigInt.fromI32(0)) {
-      addToBalance(molochId, GUILD, tributeTokenId, event.params.tribute);
-    }
-  }
+//   //GUILD w/ tribute
+//     // collect tribute from proposer and store it in Moloch ESCROW until the proposal is processed
+//   if (event.params.tribute > BigInt.fromI32(0)) {
+//       addToBalance(molochId, GUILD, tributeTokenId, event.params.tribute);
+//     }
+//   }
 
 export function handleSubmitProposal(event: SubmitProposal): void {
   let molochId = event.address.toHexString();
@@ -291,7 +292,11 @@ export function handleSubmitProposal(event: SubmitProposal): void {
     molochId.concat("-member-").concat(event.params.applicant.toHex())
   );
   let noMember = member == null || member.exists == false;
-  let newMember = noMember && event.params.sharesRequested > BigInt.fromI32(0);
+  let requestingSharesOrLoot =
+    event.params.sharesRequested > BigInt.fromI32(0) ||
+    event.params.lootRequested > BigInt.fromI32(0);
+  let newMember = noMember && requestingSharesOrLoot;
+  
 
   // For trades, members deposit tribute in the token they want to sell to the dao, and request payment in the token they wish to receive.
   let trade =
@@ -335,6 +340,7 @@ export function handleSubmitProposal(event: SubmitProposal): void {
   proposal.noShares = BigInt.fromI32(0);
   proposal.maxTotalSharesAndLootAtYesVote = BigInt.fromI32(0);
   proposal.details = event.params.details;
+  proposal.actionData = event.params.actionData;
 
   // calculate times
   let moloch = Moloch.load(molochId);
@@ -524,7 +530,11 @@ export function handleProcessProposal(event: ProcessProposal): void {
       newMember.shares = proposal.sharesRequested;
       newMember.loot = proposal.lootRequested;
 
-      if (proposal.sharesRequested > BigInt.fromI32(0)) {
+      let sharesOrLootRequested =
+        proposal.sharesRequested > BigInt.fromI32(0) ||
+        proposal.lootRequested > BigInt.fromI32(0);
+
+      if (sharesOrLootRequested) {
         newMember.exists = true;
       } else {
         newMember.exists = false;
@@ -805,8 +815,9 @@ export function handleRagequit(event: Ragequit): void {
   moloch.totalShares = moloch.totalShares.minus(event.params.sharesToBurn);
   moloch.totalLoot = moloch.totalLoot.minus(event.params.lootToBurn);
 
-  // set to doesn't exist if no shares?
-  if (member.shares.equals(new BigInt(0))) {
+  let noSharesOrLoot = member.shares.equals(new BigInt(0)) && member.loot.equals(new BigInt(0));
+
+  if(noSharesOrLoot) {
     member.exists = false;
   }
 

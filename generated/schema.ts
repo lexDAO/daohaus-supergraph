@@ -42,40 +42,6 @@ export class Moloch extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get summoners(): Array<string> | null {
-    let value = this.get("summoners");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
-  }
-
-  set summoners(value: Array<string> | null) {
-    if (value === null) {
-      this.unset("summoners");
-    } else {
-      this.set("summoners", Value.fromStringArray(value as Array<string>));
-    }
-  }
-
-  get title(): string | null {
-    let value = this.get("title");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set title(value: string | null) {
-    if (value === null) {
-      this.unset("title");
-    } else {
-      this.set("title", Value.fromString(value as string));
-    }
-  }
-
   get version(): string | null {
     let value = this.get("version");
     if (value === null) {
@@ -91,6 +57,15 @@ export class Moloch extends Entity {
     } else {
       this.set("version", Value.fromString(value as string));
     }
+  }
+
+  get summoner(): Array<string> {
+    let value = this.get("summoner");
+    return value.toStringArray();
+  }
+
+  set summoner(value: Array<string>) {
+    this.set("summoner", Value.fromStringArray(value));
   }
 
   get newContract(): string | null {
@@ -182,21 +157,13 @@ export class Moloch extends Entity {
     this.set("processingReward", Value.fromBigInt(value));
   }
 
-  get depositToken(): string | null {
+  get depositToken(): string {
     let value = this.get("depositToken");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toString();
-    }
+    return value.toString();
   }
 
-  set depositToken(value: string | null) {
-    if (value === null) {
-      this.unset("depositToken");
-    } else {
-      this.set("depositToken", Value.fromString(value as string));
-    }
+  set depositToken(value: string) {
+    this.set("depositToken", Value.fromString(value));
   }
 
   get approvedTokens(): Array<string> {
@@ -225,22 +192,13 @@ export class Moloch extends Entity {
     }
   }
 
-  get summoningTermination(): BigInt {
-    let value = this.get("summoningTermination");
-    return value.toBigInt();
+  get summonerShares(): Array<i32> {
+    let value = this.get("summonerShares");
+    return value.toI32Array();
   }
 
-  set summoningTermination(value: BigInt) {
-    this.set("summoningTermination", Value.fromBigInt(value));
-  }
-
-  get summoningRate(): BigInt {
-    let value = this.get("summoningRate");
-    return value.toBigInt();
-  }
-
-  set summoningRate(value: BigInt) {
-    this.set("summoningRate", Value.fromBigInt(value));
+  set summonerShares(value: Array<i32>) {
+    this.set("summonerShares", Value.fromI32Array(value));
   }
 
   get summoningDeposit(): BigInt | null {
@@ -509,6 +467,40 @@ export class Moloch extends Entity {
         "proposedToTrade",
         Value.fromStringArray(value as Array<string>)
       );
+    }
+  }
+
+  get summoningTermination(): BigInt | null {
+    let value = this.get("summoningTermination");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set summoningTermination(value: BigInt | null) {
+    if (value === null) {
+      this.unset("summoningTermination");
+    } else {
+      this.set("summoningTermination", Value.fromBigInt(value as BigInt));
+    }
+  }
+
+  get summoningRate(): BigInt | null {
+    let value = this.get("summoningRate");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set summoningRate(value: BigInt | null) {
+    if (value === null) {
+      this.unset("summoningRate");
+    } else {
+      this.set("summoningRate", Value.fromBigInt(value as BigInt));
     }
   }
 }
@@ -1351,13 +1343,13 @@ export class Proposal extends Entity {
     this.set("noVotes", Value.fromBigInt(value));
   }
 
-  get sponsored(): boolean {
+  get sponsored(): i32 {
     let value = this.get("sponsored");
-    return value.toBoolean();
+    return value.toI32();
   }
 
-  set sponsored(value: boolean) {
-    this.set("sponsored", Value.fromBoolean(value));
+  set sponsored(value: i32) {
+    this.set("sponsored", Value.fromI32(value));
   }
 
   get sponsoredAt(): string | null {
@@ -1377,58 +1369,58 @@ export class Proposal extends Entity {
     }
   }
 
-  get processed(): boolean {
+  get processed(): i32 {
     let value = this.get("processed");
-    return value.toBoolean();
+    return value.toI32();
   }
 
-  set processed(value: boolean) {
-    this.set("processed", Value.fromBoolean(value));
+  set processed(value: i32) {
+    this.set("processed", Value.fromI32(value));
   }
 
-  get didPass(): boolean {
+  get didPass(): i32 {
     let value = this.get("didPass");
-    return value.toBoolean();
+    return value.toI32();
   }
 
-  set didPass(value: boolean) {
-    this.set("didPass", Value.fromBoolean(value));
+  set didPass(value: i32) {
+    this.set("didPass", Value.fromI32(value));
   }
 
-  get cancelled(): boolean {
+  get cancelled(): i32 {
     let value = this.get("cancelled");
-    return value.toBoolean();
+    return value.toI32();
   }
 
-  set cancelled(value: boolean) {
-    this.set("cancelled", Value.fromBoolean(value));
+  set cancelled(value: i32) {
+    this.set("cancelled", Value.fromI32(value));
   }
 
-  get aborted(): boolean {
+  get aborted(): i32 {
     let value = this.get("aborted");
-    return value.toBoolean();
+    return value.toI32();
   }
 
-  set aborted(value: boolean) {
-    this.set("aborted", Value.fromBoolean(value));
+  set aborted(value: i32) {
+    this.set("aborted", Value.fromI32(value));
   }
 
-  get whitelist(): boolean {
+  get whitelist(): i32 {
     let value = this.get("whitelist");
-    return value.toBoolean();
+    return value.toI32();
   }
 
-  set whitelist(value: boolean) {
-    this.set("whitelist", Value.fromBoolean(value));
+  set whitelist(value: i32) {
+    this.set("whitelist", Value.fromI32(value));
   }
 
-  get guildkick(): boolean {
+  get guildkick(): i32 {
     let value = this.get("guildkick");
-    return value.toBoolean();
+    return value.toI32();
   }
 
-  set guildkick(value: boolean) {
-    this.set("guildkick", Value.fromBoolean(value));
+  set guildkick(value: i32) {
+    this.set("guildkick", Value.fromI32(value));
   }
 
   get newMember(): boolean {
@@ -1456,6 +1448,23 @@ export class Proposal extends Entity {
 
   set details(value: Bytes) {
     this.set("details", Value.fromBytes(value));
+  }
+
+  get actionData(): Bytes | null {
+    let value = this.get("actionData");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set actionData(value: Bytes | null) {
+    if (value === null) {
+      this.unset("actionData");
+    } else {
+      this.set("actionData", Value.fromBytes(value as Bytes));
+    }
   }
 
   get maxTotalSharesAndLootAtYesVote(): BigInt | null {

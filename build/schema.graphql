@@ -1,6 +1,7 @@
 type Moloch @entity {
   id: ID!
   version: String
+  summoner: [Member!]!
   newContract: String
   deleted: Boolean
   summoningTime: BigInt!
@@ -11,10 +12,10 @@ type Moloch @entity {
   dilutionBound: BigInt!
   processingReward: BigInt!
   depositToken: Token!
-  approvedTokens: [Token!]
+  approvedTokens: [Token!]!
   guildBankAddress: Bytes
-  summoningTermination: BigInt
-  summoningRate: BigInt
+  summonerShares: [Int!]!
+  summoningDeposit: BigInt
   tokens: [Token!] @derivedFrom(field: "moloch")
   members: [Member!] @derivedFrom(field: "moloch")
   tokenBalances: [TokenBalance!] @derivedFrom(field: "moloch")
@@ -31,6 +32,10 @@ type Moloch @entity {
   proposedToKick: [Proposal!]
   proposedToFund: [Proposal!]
   proposedToTrade: [Proposal!]
+
+  "NOTE: For summoning circle"
+  summoningTermination: BigInt
+  summoningRate: BigInt
 }
 
 type TokenBalance @entity {
@@ -114,17 +119,18 @@ type Proposal @entity {
   startingPeriod: BigInt
   yesVotes: BigInt!
   noVotes: BigInt!
-  sponsored: Boolean!
+  sponsored: Int!
   sponsoredAt: String
-  processed: Boolean!
-  didPass: Boolean!
-  cancelled: Boolean
-  aborted: Boolean
-  whitelist: Boolean
-  guildkick: Boolean
+  processed: Int!
+  didPass: Int!
+  cancelled: Int
+  aborted: Int
+  whitelist: Int
+  guildkick: Int
   newMember: Boolean
   trade: Boolean
   details: Bytes!
+  actionData: Bytes
   maxTotalSharesAndLootAtYesVote: BigInt
   votes: [Vote!] @derivedFrom(field: "proposal")
   yesShares: BigInt!
