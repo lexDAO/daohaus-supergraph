@@ -4,9 +4,9 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: MolochSummoner
-    network: mainnet
+    network: rinkeby
     source:
-      address: "0x40C90ec89dd4C814E91594d7AA02E9c70fFE4DF1"
+      address: "0x04FDd68b9bd3ADcD15c2dF86a855438b43A76c10"
       abi: V2Factory
       startBlock: 6006595
     mapping:
@@ -30,7 +30,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: MolochTemplate
-    network: mainnet
+    network: rinkeby
     source:
       abi: V2Moloch
     mapping:

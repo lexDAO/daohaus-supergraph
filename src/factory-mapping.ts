@@ -27,9 +27,6 @@ export function handleSummoned(event: SummonMoloch): void {
 
   let eventSummonerShares = event.params.summonerShares;
 
-
-  
-
   moloch.summoner = summoners;
   moloch.summonerShares = new Array<i32>();
   moloch.summoningTime = event.params.summoningTime;

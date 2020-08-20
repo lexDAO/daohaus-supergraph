@@ -12,7 +12,7 @@ type Moloch @entity {
   dilutionBound: BigInt!
   processingReward: BigInt!
   depositToken: Token!
-  approvedTokens: [Token!]!
+  approvedTokens: [Token!]
   guildBankAddress: Bytes
   summonerShares: [Int!]!
   summoningDeposit: BigInt
