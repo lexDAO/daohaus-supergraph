@@ -14,7 +14,6 @@ type Moloch @entity {
   depositToken: Token!
   approvedTokens: [Token!]
   guildBankAddress: Bytes
-  summonerShares: [Int!]!
   summoningDeposit: BigInt
   tokens: [Token!] @derivedFrom(field: "moloch")
   members: [Member!] @derivedFrom(field: "moloch")

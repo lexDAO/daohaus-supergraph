@@ -1,4 +1,4 @@
-import { BigInt, log, ByteArray, Address } from "@graphprotocol/graph-ts";
+import { BigInt, log } from "@graphprotocol/graph-ts";
 import { SummonMoloch } from "../generated/MolochSummoner/V2Factory";
 
 import { MolochTemplate } from "../generated/templates";
@@ -26,9 +26,22 @@ export function handleSummoned(event: SummonMoloch): void {
   let summoners: string[] = [];
 
   let eventSummonerShares = event.params.summonerShares;
+  //let summonerShares: number[] = [];
+
+  for (let i = 0; i < eventSummoners.length; i++) {
+    let summoner = eventSummoners[i];
+
+    for (let i = 0; i< eventSummonerShares.length; i++){
+      let shares = eventSummonerShares[i];
+      
+      summoners.push(
+        createAndAddSummoner(molochId, summoner, shares, depositToken, event)
+      );
+    }
+  }
 
   moloch.summoner = summoners;
-  moloch.summonerShares = new Array<i32>();
+  //moloch.summonerShares = summonerShares.toArray<i32>();
   moloch.summoningTime = event.params.summoningTime;
   moloch.version = "2x";
   moloch.deleted = false;
@@ -59,15 +72,6 @@ export function handleSummoned(event: SummonMoloch): void {
   moloch.summoningRate = event.params.summoningRate;
   moloch.summoningTermination = event.params.summoningTermination;
   */
-
-  for (let i = 0; i < eventSummoners.length; i++) {
-    let summoner = eventSummoners[i];
-    let shares = eventSummonerShares[i];
-    
-    summoners.push(
-      createAndAddSummoner(molochId, summoner, shares, depositToken, event)
-    );
-  }
 
   moloch.save();
 }

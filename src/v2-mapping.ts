@@ -250,6 +250,10 @@ export function createAndAddSummoner(
 
   addMembershipBadge(summoner);
 
+  //add shares to the moloch total shares balance
+  //moloch.totalShares = moloch.totalShares.plus(shares);
+  log.info('My addition to total shares is: {}', [shares.toString()])
+
   return memberId;
 }
 
