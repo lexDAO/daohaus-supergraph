@@ -41,6 +41,7 @@ export function handleSummoned(event: SummonMoloch): void {
   }
 
   moloch.summoner = summoners;
+  // @DEV - need to figure out a way to save this array of numbers, having issues with types and type conversions 
   //moloch.summonerShares = summonerShares.toArray<i32>();
   moloch.summoningTime = event.params.summoningTime;
   moloch.version = "2x";
@@ -56,6 +57,7 @@ export function handleSummoned(event: SummonMoloch): void {
   moloch.depositToken = depositToken.toString(); 
   moloch.guildTokenBalance = guildTokenBalance;
   moloch.escrowTokenBalance = escrowTokenBalance;
+  //@Dev need to change totalShares to loop through the eventSummonerShares[i] and add to totalShares
   moloch.totalShares = BigInt.fromI32(0);
   moloch.totalLoot = BigInt.fromI32(0);
   moloch.proposalCount = BigInt.fromI32(0);
