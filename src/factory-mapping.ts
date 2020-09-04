@@ -22,6 +22,8 @@ export function handleSummoned(event: SummonMoloch): void {
   let depositToken = event.params.depositToken;
   approvedTokens.push(createAndApproveToken(molochId, depositToken));
   moloch.depositToken = approvedTokens[0];
+  moloch.totalShares = BigInt.fromI32(0);
+  let totalShares = moloch.totalShares;
 
   let escrowTokenBalance: string[] = [];
   let guildTokenBalance: string[] = [];
@@ -38,14 +40,12 @@ export function handleSummoned(event: SummonMoloch): void {
 
   for (let i = 0; i < eventSummoners.length; i++) {
     let summoner = eventSummoners[i];
-    moloch.totalShares = BigInt.fromI32(0);
-
+    
     for (let i = 0; i< eventSummonerShares.length; i++){
       let shares = eventSummonerShares[i];
-      moloch.totalShares.plus(eventSummonerShares[i]);
 
       summoners.push(
-        createAndAddSummoner(molochId, summoner, shares, depositToken, event)
+        createAndAddSummoner(molochId, summoner, shares, depositToken, event, totalShares)
       );
     }
   }
@@ -58,6 +58,7 @@ export function handleSummoned(event: SummonMoloch): void {
   moloch.deleted = false;
   moloch.newContract = "1";
   moloch.periodDuration = event.params.periodDuration;
+  log.info('Moloch period duration is: {}', [moloch.periodDuration.toString()])
   moloch.votingPeriodLength = event.params.votingPeriodLength;
   moloch.gracePeriodLength = event.params.gracePeriodLength;
   moloch.proposalDeposit = event.params.proposalDeposit;
@@ -71,7 +72,7 @@ export function handleSummoned(event: SummonMoloch): void {
   moloch.totalLoot = BigInt.fromI32(0);
   moloch.proposalCount = BigInt.fromI32(0);
   moloch.proposalQueueCount = BigInt.fromI32(0);
-  log.info('My proposal queue is: {}', [moloch.proposalQueueCount.toString()])
+  log.info('Moloch proposal queue is: {}', [moloch.proposalQueueCount.toString()])
   moloch.proposedToJoin = new Array<string>();
   moloch.proposedToWhitelist = new Array<string>();
   moloch.proposedToKick = new Array<string>();
