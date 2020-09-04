@@ -218,15 +218,16 @@ export function createAndAddSummoner(
 ): string {
 
   let memberId = molochId.concat("-member-").concat(summoner.toHex());
+  log.info('My MolochId is: {}', [molochId])
   let member = new Member(memberId);
   log.info('My memberId is: {}', [memberId])
-  let moloch = Moloch.load(event.address.toHex());
+  
 
   member.moloch = molochId;
   log.info('My moloch is: {}', [molochId])
   member.createdAt = event.block.timestamp.toString();
   log.info('My created at is: {}', [member.createdAt])
-  member.molochAddress = event.address;
+  member.molochAddress = event.params.baal;
   member.memberAddress = summoner;
   member.delegateKey = summoner;
   member.shares = shares;
