@@ -1,24 +1,32 @@
-import { BigInt, log } from "@graphprotocol/graph-ts";
+import { BigInt, log, Address } from "@graphprotocol/graph-ts";
 import { SummonMoloch } from "../generated/MolochSummoner/V2Factory";
 
 import { MolochTemplate } from "../generated/templates";
 import { Moloch } from "../generated/schema";
-import { createAndApproveToken, createEscrowTokenBalance, createGuildTokenBalance, createAndAddSummoner} from "./v2-mapping"
+import { createAndApproveToken, createEscrowTokenBalance, createGuildTokenBalance, createAndAddSummoner, addToBalance} from "./v2-mapping"
 
 
 export function handleSummoned(event: SummonMoloch): void {
   
   MolochTemplate.create(event.params.baal);
 
+  const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+  let GUILD = Address.fromString("0x000000000000000000000000000000000000beef");
+
   let molochId = event.params.baal.toHex();
   let moloch = new Moloch(molochId);
-  let depositToken = event.params.depositToken;
+
   let approvedTokens: string[] = [];
+  moloch.approvedTokens = approvedTokens;
+
+  let depositToken = event.params.depositToken;
+  approvedTokens.push(createAndApproveToken(molochId, depositToken));
+  moloch.depositToken = approvedTokens[0];
 
   let escrowTokenBalance: string[] = [];
   let guildTokenBalance: string[] = [];
 
-  approvedTokens.push(createAndApproveToken(molochId, depositToken));
+
   escrowTokenBalance.push(createEscrowTokenBalance(molochId, depositToken));
   guildTokenBalance.push(createGuildTokenBalance(molochId, depositToken));
 
@@ -26,14 +34,16 @@ export function handleSummoned(event: SummonMoloch): void {
   let summoners: string[] = [];
 
   let eventSummonerShares = event.params.summonerShares;
-  //let summonerShares: number[] = [];
+  //let summonerShares: BigInt[] = [BigInt.fromI32([])];
 
   for (let i = 0; i < eventSummoners.length; i++) {
     let summoner = eventSummoners[i];
+    moloch.totalShares = BigInt.fromI32(0);
 
     for (let i = 0; i< eventSummonerShares.length; i++){
       let shares = eventSummonerShares[i];
-      
+      moloch.totalShares.plus(eventSummonerShares[i]);
+
       summoners.push(
         createAndAddSummoner(molochId, summoner, shares, depositToken, event)
       );
@@ -42,7 +52,7 @@ export function handleSummoned(event: SummonMoloch): void {
 
   moloch.summoner = summoners;
   // @DEV - need to figure out a way to save this array of numbers, having issues with types and type conversions 
-  //moloch.summonerShares = summonerShares.toArray<i32>();
+  //moloch.summonerShares = summonerShares;
   moloch.summoningTime = event.params.summoningTime;
   moloch.version = "2x";
   moloch.deleted = false;
@@ -54,11 +64,10 @@ export function handleSummoned(event: SummonMoloch): void {
   moloch.dilutionBound = event.params.dilutionBound;
   moloch.processingReward = event.params.processingReward;
   moloch.summoningDeposit = event.params.summoningDeposit;
-  moloch.depositToken = depositToken.toString(); 
   moloch.guildTokenBalance = guildTokenBalance;
   moloch.escrowTokenBalance = escrowTokenBalance;
-  //@Dev need to change totalShares to loop through the eventSummonerShares[i] and add to totalShares
-  moloch.totalShares = BigInt.fromI32(0);
+
+  //moloch.totalShares = BigInt.fromI32(0);
   moloch.totalLoot = BigInt.fromI32(0);
   moloch.proposalCount = BigInt.fromI32(0);
   moloch.proposalQueueCount = BigInt.fromI32(0);
@@ -69,6 +78,11 @@ export function handleSummoned(event: SummonMoloch): void {
   moloch.proposedToFund = new Array<string>();
   moloch.proposedToTrade = new Array<string>();
 
+  // Updates GUILD balance if there was a summoning deposit
+  if (moloch.summoningDeposit > BigInt.fromI32(0)){
+    addToBalance(molochId, GUILD, depositToken.toString(), event.params.summoningDeposit);
+  }
+  
   /*
   Used for summoning circle moloch
   moloch.summoningRate = event.params.summoningRate;

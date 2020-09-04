@@ -55,7 +55,8 @@ function loadOrCreateTokenBalance(
     return tokenBalance;
   }
 }
-function addToBalance(
+
+export function addToBalance(
   molochId: string,
   member: Bytes,
   token: string,
