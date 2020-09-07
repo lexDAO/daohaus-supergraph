@@ -57,7 +57,8 @@ function loadOrCreateTokenBalance(
     return tokenBalance;
   }
 }
-function addToBalance(
+
+export function addToBalance(
   molochId: string,
   member: Bytes,
   token: string,
@@ -215,25 +216,27 @@ export function createAndAddSummoner(
   summoner: Address,
   shares: BigInt,
   depositToken: Address,
-  event: SummonMoloch
+  event: SummonMoloch,
+  totalShares: BigInt
 ): string {
 
   let memberId = molochId.concat("-member-").concat(summoner.toHex());
+  let moloch = Moloch.load(molochId);
+  log.info('My MolochId is: {}', [molochId])
   let member = new Member(memberId);
   log.info('My memberId is: {}', [memberId])
-  let moloch = Moloch.load(event.address.toHex());
+  
 
   member.moloch = molochId;
   log.info('My moloch is: {}', [molochId])
   member.createdAt = event.block.timestamp.toString();
   log.info('My created at is: {}', [member.createdAt])
-  member.molochAddress = event.address;
+  member.molochAddress = event.params.baal;
   member.memberAddress = summoner;
   member.delegateKey = summoner;
   member.shares = shares;
   log.info('My member shares is: {}', [member.shares.toString()])
   member.loot = BigInt.fromI32(0);
-  log.info('My loot at is: {}', [member.shares.toString()])
   member.tokenTribute = BigInt.fromI32(0);
   log.info('My tokenTribute at is: {}', [member.tokenTribute.toString()])
   member.didRagequit = false;
@@ -251,6 +254,12 @@ export function createAndAddSummoner(
   member.save();
 
   addMembershipBadge(summoner);
+
+  //add shares to the moloch total shares balance
+  log.info('Total shares before me is: {}', [totalShares.toString()])
+  totalShares.plus(shares);
+  log.info('My addition to total shares is: {}', [shares.toString()])
+  log.info('The new total shares is: {}', [totalShares.toString()])
 
   return memberId;
 }

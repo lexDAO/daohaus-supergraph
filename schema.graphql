@@ -4,6 +4,7 @@ type Moloch @entity {
   title: String
   version: String
   summoner: [Member!]!
+  summonerShares: [BigInt!]
   newContract: String
   deleted: Boolean
   summoningTime: BigInt!
