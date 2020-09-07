@@ -2,6 +2,7 @@ type Moloch @entity {
   id: ID!
   version: String
   summoner: [Member!]!
+  summonerShares: [BigInt!]
   newContract: String
   deleted: Boolean
   summoningTime: BigInt!
@@ -12,9 +13,8 @@ type Moloch @entity {
   dilutionBound: BigInt!
   processingReward: BigInt!
   depositToken: Token!
-  approvedTokens: [Token!]!
+  approvedTokens: [Token!]
   guildBankAddress: Bytes
-  summonerShares: [Int!]!
   summoningDeposit: BigInt
   tokens: [Token!] @derivedFrom(field: "moloch")
   members: [Member!] @derivedFrom(field: "moloch")
