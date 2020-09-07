@@ -1,5 +1,7 @@
 type Moloch @entity {
   id: ID!
+  founders: [Member!]! @derivedFrom(field: "moloch")
+  title: String
   version: String
   summoner: [Member!]!
   newContract: String
@@ -14,7 +16,7 @@ type Moloch @entity {
   depositToken: Token!
   approvedTokens: [Token!]
   guildBankAddress: Bytes
-  summoningDeposit: BigInt
+  depositRate: BigInt!
   tokens: [Token!] @derivedFrom(field: "moloch")
   members: [Member!] @derivedFrom(field: "moloch")
   tokenBalances: [TokenBalance!] @derivedFrom(field: "moloch")
@@ -67,6 +69,7 @@ type Member @entity {
   delegateKey: Bytes!
   shares: BigInt!
   loot: BigInt
+  interest: BigInt
   exists: Boolean!
   highestIndexYesVote: Proposal
   tokenTribute: BigInt
@@ -79,6 +82,16 @@ type Member @entity {
   proposedToKick: Boolean
   kicked: Boolean
   jailed: Proposal
+}
+
+type Payor @entity {
+  id: ID!
+  createdAt: String!
+  moloch: Moloch!
+  molochAddress: Bytes!
+  payorAddress: Bytes!
+  payments: BigInt!
+  paymentToken: Bytes!
 }
 
 

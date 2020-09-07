@@ -1,12 +1,15 @@
-import { BigInt, log } from "@graphprotocol/graph-ts";
-import { SummonMoloch } from "../generated/MolochSummoner/V2Factory";
+
+import { BigInt, log, Bytes, Address } from "@graphprotocol/graph-ts";
+import { PartyStarted } from "../generated/MolochSummoner/V2Factory";
+
 
 import { MolochTemplate } from "../generated/templates";
 import { Moloch } from "../generated/schema";
 import { createAndApproveToken, createEscrowTokenBalance, createGuildTokenBalance, createAndAddSummoner} from "./v2-mapping"
 
 
-export function handleSummoned(event: SummonMoloch): void {
+export function handleStarted(event: PartyStarted): void {
+
   
   MolochTemplate.create(event.params.baal);
 
