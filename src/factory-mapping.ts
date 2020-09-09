@@ -22,8 +22,6 @@ export function handleSummoned(event: SummonMoloch): void {
   let depositToken = event.params.depositToken;
   approvedTokens.push(createAndApproveToken(molochId, depositToken));
   moloch.depositToken = approvedTokens[0];
-  moloch.totalShares = BigInt.fromI32(0);
-  let totalShares = moloch.totalShares;
 
   let escrowTokenBalance: string[] = [];
   let guildTokenBalance: string[] = [];
@@ -36,6 +34,9 @@ export function handleSummoned(event: SummonMoloch): void {
   let summoners: string[] = [];
 
   let eventSummonerShares = event.params.summonerShares;
+  moloch.totalShares = BigInt.fromI32(0);
+  let mTotalShares = moloch.totalShares;
+
   //let summonerShares: BigInt[] = [BigInt.fromI32([])];
 
   for (let i = 0; i < eventSummoners.length; i++) {
@@ -43,13 +44,14 @@ export function handleSummoned(event: SummonMoloch): void {
     
     for (let i = 0; i< eventSummonerShares.length; i++){
       let shares = eventSummonerShares[i];
+      mTotalShares = mTotalShares.plus(shares)
 
       summoners.push(
-        createAndAddSummoner(molochId, summoner, shares, depositToken, event, totalShares)
+        createAndAddSummoner(molochId, summoner, shares, depositToken, event)
       );
     }
   }
-
+  
   moloch.summoner = summoners;
   // @DEV - need to figure out a way to save this array of numbers, having issues with types and type conversions 
   //moloch.summonerShares = summonerShares;
@@ -67,8 +69,7 @@ export function handleSummoned(event: SummonMoloch): void {
   moloch.summoningDeposit = event.params.summoningDeposit;
   moloch.guildTokenBalance = guildTokenBalance;
   moloch.escrowTokenBalance = escrowTokenBalance;
-
-  //moloch.totalShares = BigInt.fromI32(0);
+  moloch.totalShares = mTotalShares;
   moloch.totalLoot = BigInt.fromI32(0);
   moloch.proposalCount = BigInt.fromI32(0);
   moloch.proposalQueueCount = BigInt.fromI32(0);

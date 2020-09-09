@@ -214,8 +214,7 @@ export function createAndAddSummoner(
   summoner: Address,
   shares: BigInt,
   depositToken: Address,
-  event: SummonMoloch,
-  totalShares: BigInt
+  event: SummonMoloch
 ): string {
 
   let memberId = molochId.concat("-member-").concat(summoner.toHex());
@@ -252,12 +251,6 @@ export function createAndAddSummoner(
   member.save();
 
   addMembershipBadge(summoner);
-
-  //add shares to the moloch total shares balance
-  log.info('Total shares before me is: {}', [totalShares.toString()])
-  totalShares.plus(shares);
-  log.info('My addition to total shares is: {}', [shares.toString()])
-  log.info('The new total shares is: {}', [totalShares.toString()])
 
   return memberId;
 }
