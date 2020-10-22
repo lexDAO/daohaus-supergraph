@@ -1,19 +1,19 @@
 import { BigInt, log, Address } from "@graphprotocol/graph-ts";
-import { SummonMoloch } from "../generated/MolochSummoner/V2Factory";
+import { SummonMSTX } from "../generated/MolochSummoner/V2Factory";
 
 import { MolochTemplate } from "../generated/templates";
 import { Moloch } from "../generated/schema";
 import { createAndApproveToken, createEscrowTokenBalance, createGuildTokenBalance, createAndAddSummoner, addToBalance} from "./v2-mapping"
 
 
-export function handleSummoned(event: SummonMoloch): void {
+export function handleSummoned(event: SummonMSTX): void {
   
-  MolochTemplate.create(event.params.baal);
+  MolochTemplate.create(event.params.mstx);
 
   const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
   let GUILD = Address.fromString("0x000000000000000000000000000000000000beef");
 
-  let molochId = event.params.baal.toHex();
+  let molochId = event.params.mstx.toHex();
   let moloch = new Moloch(molochId);
 
   let approvedTokens: string[] = [];
@@ -22,6 +22,10 @@ export function handleSummoned(event: SummonMoloch): void {
   let depositToken = event.params.depositToken;
   approvedTokens.push(createAndApproveToken(molochId, depositToken));
   moloch.depositToken = approvedTokens[0];
+
+  let stakeToken = event.params.stakeToken;
+  approvedTokens.push(createAndApproveToken(molochId, stakeToken));
+  moloch.depositToken = approvedTokens[1];
 
   let escrowTokenBalance: string[] = [];
   let guildTokenBalance: string[] = [];
@@ -79,17 +83,13 @@ export function handleSummoned(event: SummonMoloch): void {
   moloch.proposedToKick = new Array<string>();
   moloch.proposedToFund = new Array<string>();
   moloch.proposedToTrade = new Array<string>();
+  moloch.proposedAction = new Array<string>();
 
   // Updates GUILD balance if there was a summoning deposit
   if (moloch.summoningDeposit > BigInt.fromI32(0)){
     addToBalance(molochId, GUILD, depositToken.toString(), event.params.summoningDeposit);
   }
   
-  /*
-  Used for summoning circle moloch
-  moloch.summoningRate = event.params.summoningRate;
-  moloch.summoningTermination = event.params.summoningTermination;
-  */
 
   moloch.save();
 }

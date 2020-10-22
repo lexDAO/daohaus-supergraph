@@ -15,20 +15,20 @@ import {
   CallResult
 } from "@graphprotocol/graph-ts";
 
-export class SummonMoloch extends EthereumEvent {
-  get params(): SummonMoloch__Params {
-    return new SummonMoloch__Params(this);
+export class SummonMSTX extends EthereumEvent {
+  get params(): SummonMSTX__Params {
+    return new SummonMSTX__Params(this);
   }
 }
 
-export class SummonMoloch__Params {
-  _event: SummonMoloch;
+export class SummonMSTX__Params {
+  _event: SummonMSTX;
 
-  constructor(event: SummonMoloch) {
+  constructor(event: SummonMSTX) {
     this._event = event;
   }
 
-  get baal(): Address {
+  get mstx(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
@@ -36,7 +36,7 @@ export class SummonMoloch__Params {
     return this._event.parameters[1].value.toAddress();
   }
 
-  get wrapperToken(): Address {
+  get stakeToken(): Address {
     return this._event.parameters[2].value.toAddress();
   }
 
@@ -85,22 +85,130 @@ export class V2Factory extends SmartContract {
   static bind(address: Address): V2Factory {
     return new V2Factory("V2Factory", address);
   }
-}
 
-export class SummonMolochCall extends EthereumCall {
-  get inputs(): SummonMolochCall__Inputs {
-    return new SummonMolochCall__Inputs(this);
+  summonMSTX(
+    _depositToken: Address,
+    _stakeToken: Address,
+    _summoner: Array<Address>,
+    _summonerShares: Array<BigInt>,
+    _summonerDeposit: BigInt,
+    _proposalDeposit: BigInt,
+    _processingReward: BigInt,
+    _periodDuration: BigInt,
+    _votingPeriodLength: BigInt,
+    _gracePeriodLength: BigInt,
+    _dilutionBound: BigInt
+  ): Address {
+    let result = super.call("summonMSTX", [
+      EthereumValue.fromAddress(_depositToken),
+      EthereumValue.fromAddress(_stakeToken),
+      EthereumValue.fromAddressArray(_summoner),
+      EthereumValue.fromUnsignedBigIntArray(_summonerShares),
+      EthereumValue.fromUnsignedBigInt(_summonerDeposit),
+      EthereumValue.fromUnsignedBigInt(_proposalDeposit),
+      EthereumValue.fromUnsignedBigInt(_processingReward),
+      EthereumValue.fromUnsignedBigInt(_periodDuration),
+      EthereumValue.fromUnsignedBigInt(_votingPeriodLength),
+      EthereumValue.fromUnsignedBigInt(_gracePeriodLength),
+      EthereumValue.fromUnsignedBigInt(_dilutionBound)
+    ]);
+
+    return result[0].toAddress();
   }
 
-  get outputs(): SummonMolochCall__Outputs {
-    return new SummonMolochCall__Outputs(this);
+  try_summonMSTX(
+    _depositToken: Address,
+    _stakeToken: Address,
+    _summoner: Array<Address>,
+    _summonerShares: Array<BigInt>,
+    _summonerDeposit: BigInt,
+    _proposalDeposit: BigInt,
+    _processingReward: BigInt,
+    _periodDuration: BigInt,
+    _votingPeriodLength: BigInt,
+    _gracePeriodLength: BigInt,
+    _dilutionBound: BigInt
+  ): CallResult<Address> {
+    let result = super.tryCall("summonMSTX", [
+      EthereumValue.fromAddress(_depositToken),
+      EthereumValue.fromAddress(_stakeToken),
+      EthereumValue.fromAddressArray(_summoner),
+      EthereumValue.fromUnsignedBigIntArray(_summonerShares),
+      EthereumValue.fromUnsignedBigInt(_summonerDeposit),
+      EthereumValue.fromUnsignedBigInt(_proposalDeposit),
+      EthereumValue.fromUnsignedBigInt(_processingReward),
+      EthereumValue.fromUnsignedBigInt(_periodDuration),
+      EthereumValue.fromUnsignedBigInt(_votingPeriodLength),
+      EthereumValue.fromUnsignedBigInt(_gracePeriodLength),
+      EthereumValue.fromUnsignedBigInt(_dilutionBound)
+    ]);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toAddress());
+  }
+
+  template(): Address {
+    let result = super.call("template", []);
+
+    return result[0].toAddress();
+  }
+
+  try_template(): CallResult<Address> {
+    let result = super.tryCall("template", []);
+    if (result.reverted) {
+      return new CallResult();
+    }
+    let value = result.value;
+    return CallResult.fromValue(value[0].toAddress());
   }
 }
 
-export class SummonMolochCall__Inputs {
-  _call: SummonMolochCall;
+export class ConstructorCall extends EthereumCall {
+  get inputs(): ConstructorCall__Inputs {
+    return new ConstructorCall__Inputs(this);
+  }
 
-  constructor(call: SummonMolochCall) {
+  get outputs(): ConstructorCall__Outputs {
+    return new ConstructorCall__Outputs(this);
+  }
+}
+
+export class ConstructorCall__Inputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+
+  get _template(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class ConstructorCall__Outputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+}
+
+export class SummonMSTXCall extends EthereumCall {
+  get inputs(): SummonMSTXCall__Inputs {
+    return new SummonMSTXCall__Inputs(this);
+  }
+
+  get outputs(): SummonMSTXCall__Outputs {
+    return new SummonMSTXCall__Outputs(this);
+  }
+}
+
+export class SummonMSTXCall__Inputs {
+  _call: SummonMSTXCall;
+
+  constructor(call: SummonMSTXCall) {
     this._call = call;
   }
 
@@ -108,7 +216,7 @@ export class SummonMolochCall__Inputs {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _wrapperToken(): Address {
+  get _stakeToken(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
@@ -149,10 +257,14 @@ export class SummonMolochCall__Inputs {
   }
 }
 
-export class SummonMolochCall__Outputs {
-  _call: SummonMolochCall;
+export class SummonMSTXCall__Outputs {
+  _call: SummonMSTXCall;
 
-  constructor(call: SummonMolochCall) {
+  constructor(call: SummonMSTXCall) {
     this._call = call;
+  }
+
+  get value0(): Address {
+    return this._call.outputValues[0].value.toAddress();
   }
 }

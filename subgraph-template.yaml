@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: V2Factory
-    network: rinkeby
-    #network: mainnet 
+    #network: rinkeby
+    network: mainnet 
     source:
-     address: "0x04FDd68b9bd3ADcD15c2dF86a855438b43A76c10" # rinkeby
-     #address: "0x40C90ec89dd4C814E91594d7AA02E9c70fFE4DF1" # mainnet 
+     #address: "0x01D95D42865D5689DFb274fe9bbc739E75be9D19" # rinkeby
+     address: "0xf2626FE8e375EA4984d44dE6f682b0058a231407" # mainnet 
       abi: V2Factory
       startBlock: 6006595
     mapping:
@@ -25,14 +25,14 @@ dataSources:
         - name: Erc20Bytes32
           file: ./abis/Erc20Bytes32.json
       eventHandlers:
-        - event: SummonMoloch(indexed address,address,address,address[],uint256[],uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)
+        - event: SummonMSTX(indexed address,address,address,address[],uint256[],uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleSummoned
       file: ./src/factory-mapping.ts 
 templates:
   - kind: ethereum/contract
     name: MolochV2Template
-    network: rinkeby
-    #network: mainnet
+    #network: rinkeby
+    network: mainnet
     source:
       abi: V2Moloch
     mapping:
@@ -58,7 +58,7 @@ templates:
       eventHandlers:
         #- event: MakeSummoningTribute(indexed address,indexed uint256,indexed uint256)
         #  handler: handleSummoningTribute  
-        - event: SubmitProposal(indexed address,uint256,uint256,uint256,address,uint256,address,bytes32,uint8[7],bytes,uint256,indexed address,indexed address)
+        - event: SubmitProposal(indexed address,uint256,uint256,uint256,address,uint256,address,bytes32,uint8[9],bytes,uint256,indexed address,indexed address)
           handler: handleSubmitProposal
         - event: SubmitVote(uint256,indexed uint256,indexed address,indexed address,uint8)
           handler: handleSubmitVote
@@ -70,6 +70,8 @@ templates:
           handler: handleProcessGuildKickProposal
         - event: ProcessWhitelistProposal(indexed uint256,indexed uint256,bool)
           handler: handleProcessWhitelistProposal
+        - event: 'ProcessActionProposal(indexed uint256,indexed uint256,bool)'
+          handler: handleProcessActionProposal 
         - event: UpdateDelegateKey(indexed address,address)
           handler: handleUpdateDelegateKey
         - event: CancelProposal(indexed uint256,address)
@@ -80,3 +82,11 @@ templates:
           handler: handleRagequit
         - event: TokensCollected(indexed address,uint256)
           handler: handleTokensCollected
+        - event: 'ConvertSharesToLoot(indexed address,uint256)'
+          handler: handleConvertSharesToLoot
+        - event: 'ClaimShares(indexed address,uint256)'
+          handler: handleClaimShares
+        - event: 'Transfer(indexed address,indexed address,uint256)'
+          handler: handleTransfer
+        - event: 'Approval(indexed address,indexed address,uint256)'
+          handler: handleApproval

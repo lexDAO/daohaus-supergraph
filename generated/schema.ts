@@ -68,6 +68,23 @@ export class Moloch extends Entity {
     this.set("summoner", Value.fromStringArray(value));
   }
 
+  get summonerShares(): Array<BigInt> | null {
+    let value = this.get("summonerShares");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toBigIntArray();
+    }
+  }
+
+  set summonerShares(value: Array<BigInt> | null) {
+    if (value === null) {
+      this.unset("summonerShares");
+    } else {
+      this.set("summonerShares", Value.fromBigIntArray(value as Array<BigInt>));
+    }
+  }
+
   get newContract(): string | null {
     let value = this.get("newContract");
     if (value === null) {
@@ -166,6 +183,15 @@ export class Moloch extends Entity {
     this.set("depositToken", Value.fromString(value));
   }
 
+  get stakeToken(): string {
+    let value = this.get("stakeToken");
+    return value.toString();
+  }
+
+  set stakeToken(value: string) {
+    this.set("stakeToken", Value.fromString(value));
+  }
+
   get approvedTokens(): Array<string> {
     let value = this.get("approvedTokens");
     return value.toStringArray();
@@ -192,15 +218,6 @@ export class Moloch extends Entity {
     }
   }
 
-  get summonerShares(): Array<i32> {
-    let value = this.get("summonerShares");
-    return value.toI32Array();
-  }
-
-  set summonerShares(value: Array<i32>) {
-    this.set("summonerShares", Value.fromI32Array(value));
-  }
-
   get summoningDeposit(): BigInt | null {
     let value = this.get("summoningDeposit");
     if (value === null) {
@@ -218,21 +235,13 @@ export class Moloch extends Entity {
     }
   }
 
-  get tokens(): Array<string> | null {
+  get tokens(): Array<string> {
     let value = this.get("tokens");
-    if (value === null) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
+    return value.toStringArray();
   }
 
-  set tokens(value: Array<string> | null) {
-    if (value === null) {
-      this.unset("tokens");
-    } else {
-      this.set("tokens", Value.fromStringArray(value as Array<string>));
-    }
+  set tokens(value: Array<string>) {
+    this.set("tokens", Value.fromStringArray(value));
   }
 
   get members(): Array<string> | null {
@@ -467,6 +476,23 @@ export class Moloch extends Entity {
         "proposedToTrade",
         Value.fromStringArray(value as Array<string>)
       );
+    }
+  }
+
+  get proposedAction(): Array<string> | null {
+    let value = this.get("proposedAction");
+    if (value === null) {
+      return null;
+    } else {
+      return value.toStringArray();
+    }
+  }
+
+  set proposedAction(value: Array<string> | null) {
+    if (value === null) {
+      this.unset("proposedAction");
+    } else {
+      this.set("proposedAction", Value.fromStringArray(value as Array<string>));
     }
   }
 
@@ -1423,6 +1449,15 @@ export class Proposal extends Entity {
     this.set("guildkick", Value.fromI32(value));
   }
 
+  get action(): i32 {
+    let value = this.get("action");
+    return value.toI32();
+  }
+
+  set action(value: i32) {
+    this.set("action", Value.fromI32(value));
+  }
+
   get newMember(): boolean {
     let value = this.get("newMember");
     return value.toBoolean();
@@ -1441,6 +1476,15 @@ export class Proposal extends Entity {
     this.set("trade", Value.fromBoolean(value));
   }
 
+  get newAction(): boolean {
+    let value = this.get("newAction");
+    return value.toBoolean();
+  }
+
+  set newAction(value: boolean) {
+    this.set("newAction", Value.fromBoolean(value));
+  }
+
   get details(): Bytes {
     let value = this.get("details");
     return value.toBytes();
@@ -1450,8 +1494,8 @@ export class Proposal extends Entity {
     this.set("details", Value.fromBytes(value));
   }
 
-  get actionData(): Bytes | null {
-    let value = this.get("actionData");
+  get data(): Bytes | null {
+    let value = this.get("data");
     if (value === null) {
       return null;
     } else {
@@ -1459,11 +1503,11 @@ export class Proposal extends Entity {
     }
   }
 
-  set actionData(value: Bytes | null) {
+  set data(value: Bytes | null) {
     if (value === null) {
-      this.unset("actionData");
+      this.unset("data");
     } else {
-      this.set("actionData", Value.fromBytes(value as Bytes));
+      this.set("data", Value.fromBytes(value as Bytes));
     }
   }
 

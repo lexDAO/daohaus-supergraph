@@ -1,11 +1,22 @@
 [
   {
+    "inputs": [
+      {
+        "internalType": "address payable",
+        "name": "_template",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
         "indexed": true,
         "internalType": "address",
-        "name": "baal",
+        "name": "mstx",
         "type": "address"
       },
       {
@@ -17,7 +28,7 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "wrapperToken",
+        "name": "stakeToken",
         "type": "address"
       },
       {
@@ -81,11 +92,10 @@
         "type": "uint256"
       }
     ],
-    "name": "SummonMoloch",
+    "name": "SummonMSTX",
     "type": "event"
   },
   {
-    "constant": false,
     "inputs": [
       {
         "internalType": "address",
@@ -94,7 +104,7 @@
       },
       {
         "internalType": "address",
-        "name": "_wrapperToken",
+        "name": "_stakeToken",
         "type": "address"
       },
       {
@@ -143,10 +153,28 @@
         "type": "uint256"
       }
     ],
-    "name": "summonMoloch",
-    "outputs": [],
-    "payable": false,
+    "name": "summonMSTX",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "template",
+    "outputs": [
+      {
+        "internalType": "address payable",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   }
 ]

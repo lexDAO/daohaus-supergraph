@@ -1,65 +1,28 @@
 [
 	{
+		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": true,
 				"internalType": "address",
-				"name": "_depositToken",
+				"name": "owner",
 				"type": "address"
 			},
 			{
+				"indexed": true,
 				"internalType": "address",
-				"name": "_wrapperToken",
+				"name": "spender",
 				"type": "address"
 			},
 			{
-				"internalType": "address[]",
-				"name": "_summoner",
-				"type": "address[]"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "_summonerShares",
-				"type": "uint256[]"
-			},
-			{
+				"indexed": false,
 				"internalType": "uint256",
-				"name": "_summonerDeposit",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_proposalDeposit",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_processingReward",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_periodDuration",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_votingPeriodLength",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_gracePeriodLength",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_dilutionBound",
+				"name": "amount",
 				"type": "uint256"
 			}
 		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
+		"name": "Approval",
+		"type": "event"
 	},
 	{
 		"anonymous": false,
@@ -85,6 +48,25 @@
 		"inputs": [
 			{
 				"indexed": true,
+				"internalType": "address",
+				"name": "memberAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "ConvertSharesToLoot",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
 				"internalType": "uint256",
 				"name": "proposalIndex",
 				"type": "uint256"
@@ -102,7 +84,7 @@
 				"type": "bool"
 			}
 		],
-		"name": "ProcessGuildActionProposal",
+		"name": "ProcessActionProposal",
 		"type": "event"
 	},
 	{
@@ -185,6 +167,31 @@
 		"inputs": [
 			{
 				"indexed": true,
+				"internalType": "uint256",
+				"name": "proposalIndex",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "proposalId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "didPass",
+				"type": "bool"
+			}
+		],
+		"name": "ProcessWithdrawalProposal",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
 				"internalType": "address",
 				"name": "memberAddress",
 				"type": "address"
@@ -248,6 +255,25 @@
 			{
 				"indexed": true,
 				"internalType": "address",
+				"name": "memberAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "StakeTokenForShares",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
 				"name": "applicant",
 				"type": "address"
 			},
@@ -295,14 +321,14 @@
 			},
 			{
 				"indexed": false,
-				"internalType": "uint8[7]",
+				"internalType": "uint8[9]",
 				"name": "flags",
-				"type": "uint8[7]"
+				"type": "uint8[9]"
 			},
 			{
 				"indexed": false,
 				"internalType": "bytes",
-				"name": "actionData",
+				"name": "data",
 				"type": "bytes"
 			},
 			{
@@ -389,13 +415,13 @@
 			{
 				"indexed": true,
 				"internalType": "address",
-				"name": "from",
+				"name": "sender",
 				"type": "address"
 			},
 			{
 				"indexed": true,
 				"internalType": "address",
-				"name": "to",
+				"name": "recipient",
 				"type": "address"
 			},
 			{
@@ -453,12 +479,6 @@
 		"type": "event"
 	},
 	{
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "fallback"
-	},
-	{
-		"constant": true,
 		"inputs": [],
 		"name": "ESCROW",
 		"outputs": [
@@ -468,12 +488,10 @@
 				"type": "address"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "GUILD",
 		"outputs": [
@@ -483,12 +501,10 @@
 				"type": "address"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "TOTAL",
 		"outputs": [
@@ -498,12 +514,10 @@
 				"type": "address"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -514,27 +528,63 @@
 		"name": "actions",
 		"outputs": [
 			{
-				"internalType": "address",
-				"name": "to",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			},
-			{
 				"internalType": "bytes",
-				"name": "data",
+				"name": "",
 				"type": "bytes"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "allowance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -550,16 +600,14 @@
 				"type": "address"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "account",
+				"name": "",
 				"type": "address"
 			}
 		],
@@ -571,12 +619,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -592,12 +638,10 @@
 				"type": "bool"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -607,27 +651,10 @@
 		],
 		"name": "cancelProposal",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			}
-		],
-		"name": "claimShares",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "address",
@@ -637,12 +664,10 @@
 		],
 		"name": "collectTokens",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -652,12 +677,10 @@
 		],
 		"name": "convertSharesToLoot",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "decimals",
 		"outputs": [
@@ -667,12 +690,10 @@
 				"type": "uint8"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "depositToken",
 		"outputs": [
@@ -682,12 +703,10 @@
 				"type": "address"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "dilutionBound",
 		"outputs": [
@@ -697,12 +716,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "getCurrentPeriod",
 		"outputs": [
@@ -712,12 +729,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [
 			{
 				"internalType": "address",
@@ -733,17 +748,15 @@
 		"name": "getMemberProposalVote",
 		"outputs": [
 			{
-				"internalType": "enum Moloch.Vote",
+				"internalType": "enum MSTX.Vote",
 				"name": "",
 				"type": "uint8"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -754,17 +767,15 @@
 		"name": "getProposalFlags",
 		"outputs": [
 			{
-				"internalType": "uint8[7]",
+				"internalType": "uint8[9]",
 				"name": "",
-				"type": "uint8[7]"
+				"type": "uint8[9]"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "getProposalQueueLength",
 		"outputs": [
@@ -774,12 +785,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "getTokenCount",
 		"outputs": [
@@ -789,12 +798,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [
 			{
 				"internalType": "address",
@@ -815,12 +822,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "gracePeriodLength",
 		"outputs": [
@@ -830,12 +835,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -851,12 +854,73 @@
 				"type": "bool"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_depositToken",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_stakeToken",
+				"type": "address"
+			},
+			{
+				"internalType": "address[]",
+				"name": "_summoner",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_summonerShares",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_summonerDeposit",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_proposalDeposit",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_processingReward",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_periodDuration",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_votingPeriodLength",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_gracePeriodLength",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_dilutionBound",
+				"type": "uint256"
+			}
+		],
+		"name": "init",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -872,12 +936,10 @@
 				"type": "address"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [
 			{
 				"internalType": "address",
@@ -918,12 +980,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "name",
 		"outputs": [
@@ -933,12 +993,10 @@
 				"type": "string"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "periodDuration",
 		"outputs": [
@@ -948,12 +1006,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -961,20 +1017,23 @@
 				"type": "uint256"
 			}
 		],
-		"name": "processGuildActionProposal",
+		"name": "processActionProposal",
 		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			},
 			{
 				"internalType": "bytes",
 				"name": "",
 				"type": "bytes"
 			}
 		],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -984,12 +1043,10 @@
 		],
 		"name": "processGuildKickProposal",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -999,12 +1056,10 @@
 		],
 		"name": "processProposal",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -1014,12 +1069,23 @@
 		],
 		"name": "processWhitelistProposal",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "proposalIndex",
+				"type": "uint256"
+			}
+		],
+		"name": "processWithdrawalProposal",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "processingReward",
 		"outputs": [
@@ -1029,12 +1095,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "proposalCount",
 		"outputs": [
@@ -1044,12 +1108,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "proposalDeposit",
 		"outputs": [
@@ -1059,12 +1121,29 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "proposalQueue",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -1145,12 +1224,10 @@
 				"type": "bytes32"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [
 			{
 				"internalType": "address",
@@ -1166,12 +1243,10 @@
 				"type": "bool"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [
 			{
 				"internalType": "address",
@@ -1187,12 +1262,10 @@
 				"type": "bool"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "address",
@@ -1202,12 +1275,10 @@
 		],
 		"name": "ragekick",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -1222,12 +1293,10 @@
 		],
 		"name": "ragequit",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -1237,12 +1306,36 @@
 		],
 		"name": "sponsorProposal",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
+		"inputs": [],
+		"name": "stakeToken",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "stakeTokenForShares",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -1251,21 +1344,26 @@
 			},
 			{
 				"internalType": "uint256",
-				"name": "actionValue",
+				"name": "actionTokenAmount",
 				"type": "uint256"
 			},
 			{
-				"internalType": "bytes",
-				"name": "actionData",
-				"type": "bytes"
+				"internalType": "uint256",
+				"name": "actionValue",
+				"type": "uint256"
 			},
 			{
 				"internalType": "bytes32",
 				"name": "details",
 				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes",
+				"name": "data",
+				"type": "bytes"
 			}
 		],
-		"name": "submitGuildActionProposal",
+		"name": "submitActionProposal",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -1273,12 +1371,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "address",
@@ -1299,12 +1395,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "address",
@@ -1355,12 +1449,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": true,
 		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -1375,12 +1467,10 @@
 		],
 		"name": "submitVote",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "address",
@@ -1401,12 +1491,34 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": true,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "withdrawalTo",
+				"type": "address"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "details",
+				"type": "bytes32"
+			}
+		],
+		"name": "submitWithdrawalProposal",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "proposalId",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "summoningTime",
 		"outputs": [
@@ -1416,12 +1528,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "symbol",
 		"outputs": [
@@ -1431,12 +1541,10 @@
 				"type": "string"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [
 			{
 				"internalType": "address",
@@ -1452,12 +1560,10 @@
 				"type": "bool"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "totalGuildBankTokens",
 		"outputs": [
@@ -1467,12 +1573,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "totalLoot",
 		"outputs": [
@@ -1482,12 +1586,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "totalShares",
 		"outputs": [
@@ -1497,12 +1599,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "totalSupply",
 		"outputs": [
@@ -1512,16 +1612,14 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "receiver",
+				"name": "recipient",
 				"type": "address"
 			},
 			{
@@ -1531,13 +1629,46 @@
 			}
 		],
 		"name": "transfer",
-		"outputs": [],
-		"payable": false,
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "recipient",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "lootToTransfer",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -1547,12 +1678,10 @@
 		],
 		"name": "updateDelegateKey",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "votingPeriodLength",
 		"outputs": [
@@ -1562,12 +1691,10 @@
 				"type": "uint256"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": true,
 		"inputs": [],
 		"name": "wETH",
 		"outputs": [
@@ -1577,12 +1704,10 @@
 				"type": "address"
 			}
 		],
-		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "address",
@@ -1597,12 +1722,10 @@
 		],
 		"name": "withdrawBalance",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
 		"inputs": [
 			{
 				"internalType": "address[]",
@@ -1622,23 +1745,11 @@
 		],
 		"name": "withdrawBalances",
 		"outputs": [],
-		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [],
-		"name": "wrapperToken",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
+		"stateMutability": "payable",
+		"type": "receive"
 	}
 ]
