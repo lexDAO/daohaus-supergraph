@@ -16,7 +16,7 @@
 			{
 				"indexed": true,
 				"internalType": "address",
-				"name": "mstx",
+				"name": "mystic",
 				"type": "address"
 			},
 			{
@@ -92,7 +92,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "SummonMSTX",
+		"name": "SummonMYSTIC",
 		"type": "event"
 	},
 	{
@@ -151,9 +151,14 @@
 				"internalType": "uint256",
 				"name": "_dilutionBound",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_guildName",
+				"type": "string"
 			}
 		],
-		"name": "summonMSTX",
+		"name": "summonMYSTIC",
 		"outputs": [
 			{
 				"internalType": "address",
