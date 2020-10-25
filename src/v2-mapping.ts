@@ -39,11 +39,11 @@ import {
   addMembershipBadge,
   addProposalProcessorBadge,
 } from "./badges";
-import { SummonMSTX } from "../generated/MolochSummoner/V2Factory";
+import { SummonMYSTIC } from "../generated/MolochSummoner/V2Factory";
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
-let ESCROW = Address.fromString("0x000000000000000000000000000000000000dead");
-let GUILD = Address.fromString("0x000000000000000000000000000000000000beef");
+let ESCROW = Address.fromString("0x000000000000000000000000000000000000deaf");
+let GUILD = Address.fromString("0x000000000000000000000000000000000000dead");
 
 function loadOrCreateTokenBalance(
   molochId: string,
@@ -219,7 +219,7 @@ export function createAndAddSummoner(
   summoner: Address,
   shares: BigInt,
   depositToken: Address,
-  event: SummonMSTX
+  event: SummonMYSTIC
 ): string {
 
   let memberId = molochId.concat("-member-").concat(summoner.toHex());
@@ -229,7 +229,7 @@ export function createAndAddSummoner(
 
   member.moloch = molochId;
   member.createdAt = event.block.timestamp.toString();
-  member.molochAddress = event.params.mstx;
+  member.molochAddress = event.params.mystic;
   member.memberAddress = summoner;
   member.delegateKey = summoner;
   member.shares = shares;
@@ -363,6 +363,7 @@ export function handleSubmitProposal(event: SubmitProposal): void {
   proposal.whitelist = flags[4];
   proposal.guildkick = flags[5];
   proposal.action = flags[6];
+  proposal.standard = flags[7];
   proposal.newMember = newMember;
   proposal.trade = trade;
   proposal.yesShares = BigInt.fromI32(0);
