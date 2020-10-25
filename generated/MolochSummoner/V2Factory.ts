@@ -15,20 +15,20 @@ import {
   CallResult
 } from "@graphprotocol/graph-ts";
 
-export class SummonMSTX extends EthereumEvent {
-  get params(): SummonMSTX__Params {
-    return new SummonMSTX__Params(this);
+export class SummonMYSTIC extends EthereumEvent {
+  get params(): SummonMYSTIC__Params {
+    return new SummonMYSTIC__Params(this);
   }
 }
 
-export class SummonMSTX__Params {
-  _event: SummonMSTX;
+export class SummonMYSTIC__Params {
+  _event: SummonMYSTIC;
 
-  constructor(event: SummonMSTX) {
+  constructor(event: SummonMYSTIC) {
     this._event = event;
   }
 
-  get mstx(): Address {
+  get mystic(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
@@ -86,7 +86,7 @@ export class V2Factory extends SmartContract {
     return new V2Factory("V2Factory", address);
   }
 
-  summonMSTX(
+  summonMYSTIC(
     _depositToken: Address,
     _stakeToken: Address,
     _summoner: Array<Address>,
@@ -97,9 +97,10 @@ export class V2Factory extends SmartContract {
     _periodDuration: BigInt,
     _votingPeriodLength: BigInt,
     _gracePeriodLength: BigInt,
-    _dilutionBound: BigInt
+    _dilutionBound: BigInt,
+    _guildName: String
   ): Address {
-    let result = super.call("summonMSTX", [
+    let result = super.call("summonMYSTIC", [
       EthereumValue.fromAddress(_depositToken),
       EthereumValue.fromAddress(_stakeToken),
       EthereumValue.fromAddressArray(_summoner),
@@ -110,13 +111,14 @@ export class V2Factory extends SmartContract {
       EthereumValue.fromUnsignedBigInt(_periodDuration),
       EthereumValue.fromUnsignedBigInt(_votingPeriodLength),
       EthereumValue.fromUnsignedBigInt(_gracePeriodLength),
-      EthereumValue.fromUnsignedBigInt(_dilutionBound)
+      EthereumValue.fromUnsignedBigInt(_dilutionBound),
+      EthereumValue.fromString(_guildName)
     ]);
 
     return result[0].toAddress();
   }
 
-  try_summonMSTX(
+  try_summonMYSTIC(
     _depositToken: Address,
     _stakeToken: Address,
     _summoner: Array<Address>,
@@ -127,9 +129,10 @@ export class V2Factory extends SmartContract {
     _periodDuration: BigInt,
     _votingPeriodLength: BigInt,
     _gracePeriodLength: BigInt,
-    _dilutionBound: BigInt
+    _dilutionBound: BigInt,
+    _guildName: String
   ): CallResult<Address> {
-    let result = super.tryCall("summonMSTX", [
+    let result = super.tryCall("summonMYSTIC", [
       EthereumValue.fromAddress(_depositToken),
       EthereumValue.fromAddress(_stakeToken),
       EthereumValue.fromAddressArray(_summoner),
@@ -140,7 +143,8 @@ export class V2Factory extends SmartContract {
       EthereumValue.fromUnsignedBigInt(_periodDuration),
       EthereumValue.fromUnsignedBigInt(_votingPeriodLength),
       EthereumValue.fromUnsignedBigInt(_gracePeriodLength),
-      EthereumValue.fromUnsignedBigInt(_dilutionBound)
+      EthereumValue.fromUnsignedBigInt(_dilutionBound),
+      EthereumValue.fromString(_guildName)
     ]);
     if (result.reverted) {
       return new CallResult();
@@ -195,20 +199,20 @@ export class ConstructorCall__Outputs {
   }
 }
 
-export class SummonMSTXCall extends EthereumCall {
-  get inputs(): SummonMSTXCall__Inputs {
-    return new SummonMSTXCall__Inputs(this);
+export class SummonMYSTICCall extends EthereumCall {
+  get inputs(): SummonMYSTICCall__Inputs {
+    return new SummonMYSTICCall__Inputs(this);
   }
 
-  get outputs(): SummonMSTXCall__Outputs {
-    return new SummonMSTXCall__Outputs(this);
+  get outputs(): SummonMYSTICCall__Outputs {
+    return new SummonMYSTICCall__Outputs(this);
   }
 }
 
-export class SummonMSTXCall__Inputs {
-  _call: SummonMSTXCall;
+export class SummonMYSTICCall__Inputs {
+  _call: SummonMYSTICCall;
 
-  constructor(call: SummonMSTXCall) {
+  constructor(call: SummonMYSTICCall) {
     this._call = call;
   }
 
@@ -257,10 +261,10 @@ export class SummonMSTXCall__Inputs {
   }
 }
 
-export class SummonMSTXCall__Outputs {
-  _call: SummonMSTXCall;
+export class SummonMYSTICCall__Outputs {
+  _call: SummonMYSTICCall;
 
-  constructor(call: SummonMSTXCall) {
+  constructor(call: SummonMYSTICCall) {
     this._call = call;
   }
 
