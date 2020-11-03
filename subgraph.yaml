@@ -8,7 +8,7 @@ dataSources:
     network: mainnet
     source:
       #address: "0x01D95D42865D5689DFb274fe9bbc739E75be9D19" # rinkeby
-      address: "0xf2626FE8e375EA4984d44dE6f682b0058a231407" # mainnet 
+      address: "0x5E4EfA02717Cd9261000d94faf79Fc54347006aa" # mainnet 
       abi: V2Factory
       startBlock: 6006595
     mapping:
@@ -25,7 +25,7 @@ dataSources:
         - name: Erc20Bytes32
           file: ./abis/Erc20Bytes32.json
       eventHandlers:
-        - event: SummonMSTX(indexed address,address,address,address[],uint256[],uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)
+        - event: SummonMYSTIC(indexed address,address,address,address[],uint256[],uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleSummoned
       file: ./src/factory-mapping.ts
 templates:
@@ -56,7 +56,7 @@ templates:
         - name: Erc20Bytes32
           file: ./abis/Erc20Bytes32.json
       eventHandlers:
-        - event: SubmitProposal(indexed address,uint256,uint256,uint256,address,uint256,address,bytes32,uint8[9],bytes,uint256,indexed address,indexed address)
+        - event: SubmitProposal(indexed address,uint256,uint256,uint256,address,uint256,address,bytes32,uint8[8],bytes,uint256,indexed address,indexed address)
           handler: handleSubmitProposal
         - event: SubmitVote(uint256,indexed uint256,indexed address,indexed address,uint8)
           handler: handleSubmitVote

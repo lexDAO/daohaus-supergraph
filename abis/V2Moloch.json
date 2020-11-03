@@ -167,31 +167,6 @@
 		"inputs": [
 			{
 				"indexed": true,
-				"internalType": "uint256",
-				"name": "proposalIndex",
-				"type": "uint256"
-			},
-			{
-				"indexed": true,
-				"internalType": "uint256",
-				"name": "proposalId",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "bool",
-				"name": "didPass",
-				"type": "bool"
-			}
-		],
-		"name": "ProcessWithdrawalProposal",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": true,
 				"internalType": "address",
 				"name": "memberAddress",
 				"type": "address"
@@ -321,9 +296,9 @@
 			},
 			{
 				"indexed": false,
-				"internalType": "uint8[9]",
+				"internalType": "uint8[8]",
 				"name": "flags",
-				"type": "uint8[9]"
+				"type": "uint8[8]"
 			},
 			{
 				"indexed": false,
@@ -748,7 +723,7 @@
 		"name": "getMemberProposalVote",
 		"outputs": [
 			{
-				"internalType": "enum MSTX.Vote",
+				"internalType": "enum MYSTIC.Vote",
 				"name": "",
 				"type": "uint8"
 			}
@@ -767,9 +742,9 @@
 		"name": "getProposalFlags",
 		"outputs": [
 			{
-				"internalType": "uint8[9]",
+				"internalType": "uint8[8]",
 				"name": "",
-				"type": "uint8[9]"
+				"type": "uint8[8]"
 			}
 		],
 		"stateMutability": "view",
@@ -913,6 +888,11 @@
 				"internalType": "uint256",
 				"name": "_dilutionBound",
 				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_guildName",
+				"type": "string"
 			}
 		],
 		"name": "init",
@@ -1068,19 +1048,6 @@
 			}
 		],
 		"name": "processWhitelistProposal",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "proposalIndex",
-				"type": "uint256"
-			}
-		],
-		"name": "processWithdrawalProposal",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -1484,30 +1451,6 @@
 			}
 		],
 		"name": "submitWhitelistProposal",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "proposalId",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "withdrawalTo",
-				"type": "address"
-			},
-			{
-				"internalType": "bytes32",
-				"name": "details",
-				"type": "bytes32"
-			}
-		],
-		"name": "submitWithdrawalProposal",
 		"outputs": [
 			{
 				"internalType": "uint256",

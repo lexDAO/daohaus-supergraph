@@ -1,19 +1,19 @@
 import { BigInt, log, Address } from "@graphprotocol/graph-ts";
-import { SummonMSTX } from "../generated/MolochSummoner/V2Factory";
+import { SummonMYSTIC } from "../generated/MolochSummoner/V2Factory";
 
 import { MolochTemplate } from "../generated/templates";
 import { Moloch } from "../generated/schema";
 import { createAndApproveToken, createEscrowTokenBalance, createGuildTokenBalance, createAndAddSummoner, addToBalance} from "./v2-mapping"
 
 
-export function handleSummoned(event: SummonMSTX): void {
+export function handleSummoned(event: SummonMYSTIC): void {
   
-  MolochTemplate.create(event.params.mstx);
+  MolochTemplate.create(event.params.mystic);
 
   const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
-  let GUILD = Address.fromString("0x000000000000000000000000000000000000beef");
+  let GUILD = Address.fromString("0x000000000000000000000000000000000000dead");
 
-  let molochId = event.params.mstx.toHex();
+  let molochId = event.params.mystic.toHex();
   let moloch = new Moloch(molochId);
 
   let approvedTokens: string[] = [];
