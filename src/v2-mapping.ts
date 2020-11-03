@@ -1040,6 +1040,52 @@ export function handleTokensCollected(event: TokensCollected): void {
   addToBalance(molochId, GUILD, tokenId, event.params.amountToCollect);
 }
 
+export function handleTransfer(event: Transfer): void {
+  let molochId = event.address.toHexString();
+  let moloch = Moloch.load(molochId);
+  
+  if (event.params.sender.toHex() != ZERO_ADDRESS) {
+
+    // First subtract loot from existing member
+    let memberId = molochId
+    .concat("-member-")
+    .concat(event.params.sender.toHex());
+    let member = Member.load(memberId);
+    let lootToTransfer = event.params.amount;
+    member.loot = member.loot.minus(lootToTransfer);
+    member.save();
+
+    // Then check whether recipient exists
+    let recipientId = molochId
+    .concat("-member-")
+    .concat(event.params.recipient.toHex());
+    let recipient = Member.load(recipientId);
+
+    if (recipient == null) {
+      let newMember = new Member(recipientId);
+
+      newMember.moloch = molochId;
+      newMember.createdAt = event.block.timestamp.toString();
+      newMember.molochAddress = event.address;
+      newMember.memberAddress = event.params.recipient;
+      newMember.delegateKey = event.params.recipient;
+      newMember.shares = BigInt.fromI32(0);
+      newMember.loot = event.params.amount;
+      newMember.exists = true;
+      newMember.tokenTribute = BigInt.fromI32(0);
+      newMember.didRagequit = false;
+      newMember.proposedToKick = false;
+      newMember.kicked = false;
+
+      newMember.save();
+    } else {
+      recipient.loot = recipient.loot.minus(event.params.amount);
+      recipient.save();
+    }
+
+  }
+}
+
 export function handleConvertSharesToLoot(event: ConvertSharesToLoot): void {
   let molochId = event.address.toHexString();
   let moloch = Moloch.load(molochId);
@@ -1065,4 +1111,19 @@ export function handleConvertSharesToLoot(event: ConvertSharesToLoot): void {
   moloch.totalLoot = molochLoot.plus(event.params.amount);
 
   moloch.save();
+}
+
+export function handleApproval(event: Approval): void {
+  
+  log.info(
+    "***********handleWithdraw tx {}, ammount, {}, from {}, memberAddress {}",
+    [
+      event.transaction.hash.toHex(),
+      event.params.amount.toString(),
+      event.transaction.from.toHex(),
+      event.params.spender.toHex(),
+      event.params.amount.toHex(),
+    ]
+  );
+
 }

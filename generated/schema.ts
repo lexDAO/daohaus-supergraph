@@ -183,13 +183,21 @@ export class Moloch extends Entity {
     this.set("depositToken", Value.fromString(value));
   }
 
-  get stakeToken(): string {
+  get stakeToken(): string | null {
     let value = this.get("stakeToken");
-    return value.toString();
+    if (value === null) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set stakeToken(value: string) {
-    this.set("stakeToken", Value.fromString(value));
+  set stakeToken(value: string | null) {
+    if (value === null) {
+      this.unset("stakeToken");
+    } else {
+      this.set("stakeToken", Value.fromString(value as string));
+    }
   }
 
   get approvedTokens(): Array<string> {
